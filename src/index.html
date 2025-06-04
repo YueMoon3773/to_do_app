@@ -1218,66 +1218,104 @@
 
         <div class="modalWrapper">
             <div class="modal">
-                <form action="" data-action="add" class="addItemModal show">
-                    <!-- <div class="addModalHeader">
-                    </div> -->
-                    <h2 class="addModalHeading">
-                        <span class="addModalHeadingAction"> Create a new </span>
-                        <span class="addModalHeadingType">PROJECT</span>
+                <!-- MODAL FORM FOR ADD/EDIT TO-DO; PRJ; NOTE  -->
+                <form action="" data-action="add" class="addEditItemModal">
+                    <h2 class="addEditModalHeading">
+                        <span class="addEditModalHeadingAction"> Create a new </span>
+                        <span class="addEditModalHeadingType">PROJECT</span>
                     </h2>
 
-                    <div class="addModalBody">
-                        <div class="addModalBodyTop">
-                            <label for="addModalTitleInp" class="addModalTitleLabel">
+                    <div class="addEditModalBody">
+                        <div class="addEditModalBodyTop">
+                            <label for="addEditModalTitleInp" class="addEditModalTitleLabel">
                                 Title <span aria-label="require">*</span>
                             </label>
                             <input
                                 type="text"
-                                name="addModalTitleInp"
-                                id="addModalTitleInp"
-                                class="addModalTitleInp"
+                                name="addEditModalTitleInp"
+                                id="addEditModalTitleInp"
+                                class="addEditModalTitleInp"
                                 placeholder="Sample heading text"
                             />
 
-                            <label for="addModalDetailInp" class="addModalDetailLabel show"> Detail </label>
+                            <label for="addEditModalDetailInp" class="addEditModalDetailLabel show"> Detail </label>
                             <textarea
-                                name="addModalDetailInp"
-                                id="addModalDetailInp"
-                                class="addModalDetailInp show"
+                                name="addEditModalDetailInp"
+                                id="addEditModalDetailInp"
+                                class="addEditModalDetailInp show"
                                 placeholder="Sample detail text"
                             ></textarea>
                         </div>
 
-                        <div class="addModalBodyBottom show">
-                            <label for="addModalDateInp" class="addModalDateLabel">Due date</label>
+                        <div class="addEditModalBodyBottom show">
+                            <label for="addEditModalDateInp" class="addEditModalDateLabel">Due date</label>
                             <input
                                 type="date"
-                                name="addModalDateInp"
-                                id="addModalDateInp"
-                                class="addModalDateInp"
+                                name="addEditModalDateInp"
+                                id="addEditModalDateInp"
+                                class="addEditModalDateInp"
                                 min="2025-01-01"
                                 max="2099-12-31"
                             />
-                            <label for="" class="addModalPriorityLabel">Priority</label>
-                            <div class="addModalPriorityWrapper">
-                                <button class="addModalPriorityBtn" value="low">Low</button>
-                                <button class="addModalPriorityBtn" value="medium">Medium</button>
-                                <button class="addModalPriorityBtn" value="high">High</button>
+                            <label for="" class="addEditModalPriorityLabel">Priority</label>
+                            <div class="addEditModalPriorityWrapper">
+                                <button class="addEditModalPriorityBtn" value="low">Low</button>
+                                <button class="addEditModalPriorityBtn" value="medium">Medium</button>
+                                <button class="addEditModalPriorityBtn" value="high">High</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="addModalFooter">
-                        <button class="addModalBtn">
-                            <span class="addModalBtnAction">Add</span>
-                            <span class="addModalBtnType">Project</span>
+                    <div class="addEditModalFooter">
+                        <button class="addEditModalBtn">
+                            <span class="addEditModalBtnAction">Add</span>
+                            <span class="addEditModalBtnType">Project</span>
                         </button>
                     </div>
                 </form>
 
-                <div class="addModalCloseWrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="addModalCloseIcon">
-                        <title>Close</title>
+                <div class="detailModal show">
+                    <h2 class="detailModalHeading">Some sample Heading</h2>
+                    <div class="detailModalContentWrapper">
+                        <h4 class="detailModalContentHeading">Some heading</h4>
+                        <p class="detailModalContent">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        <h4 class="detailModalContentHeading">Some heading</h4>
+                        <p class="detailModalContent">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        <h4 class="detailModalContentHeading">Some heading</h4>
+                        <p class="detailModalContent">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                        <h4 class="detailModalContentHeading">Some heading</h4>
+                        <p class="detailModalContent">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- CLOSE MODAL BTN SECTION  -->
+                <div class="modalCloseWrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="modalCloseIcon">
+                        <title>Close window</title>
                         <path
                             d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z"
                         />
