@@ -101,6 +101,24 @@ ul {
     }
 }
 
+@keyframes zoomInAppear {
+    from {
+        transform: scale(0.2);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomInDisappear {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(0.2);
+    }
+}
+
 body {
     position: relative;
 }
@@ -424,8 +442,9 @@ body {
     grid-row: 2 / 3;
 
     font-size: 1rem;
-    padding: 3em 4.6em;
+    padding: 3em 4.6em ;
     background-color: var(--white_color);
+    /* margin-bottom: 0.8em; */
 
     overflow-y: auto;
 }
@@ -816,9 +835,15 @@ body {
     background-color: var(--modal_blur_bg_color);
     backdrop-filter: blur(10px);
 
+    display: none;
+    animation: appear 100ms ease;
+}
+
+.modalWrapper.show {
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: vanish 100ms ease;
 }
 
 .modal {
@@ -1167,4 +1192,12 @@ body {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.modalWrapper.show .modal {
+    animation: zoomInAppear 360ms ease;
+}
+
+.modalWrapper .modal {
+    animation: zoomInDisappear 360ms ease;
 }
