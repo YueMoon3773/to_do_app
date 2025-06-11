@@ -243,6 +243,7 @@ body {
     font-size: 3.6rem;
     font-weight: 300;
     color: var(--black_text);
+    text-transform: capitalize;
 
     transition-property: all;
     transition-duration: 600ms;
@@ -411,10 +412,6 @@ body {
 .sideItem:hover .sideItemText,
 .sideProjectItem:hover .projectItemText {
     transform: translate(0.4em, 0.1em);
-}
-
-.sideItem:hover .sideItemText,
-.sideProjectItem:hover .projectItemText {
     color: var(--primary_color);
     font-weight: 500;
 }
@@ -442,7 +439,7 @@ body {
     grid-row: 2 / 3;
 
     font-size: 1rem;
-    padding: 3em 4.6em ;
+    padding: 3em 4.6em;
     background-color: var(--white_color);
     /* margin-bottom: 0.8em; */
 
@@ -501,6 +498,7 @@ body {
 .todoCard:hover {
     box-shadow: var(--card_primary_box_shadow);
     transform: scale(1.01);
+    background-color: var(--footer_bg_color);
 }
 
 .todoCard.done {

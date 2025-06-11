@@ -9,10 +9,37 @@
 
 import '../css/styles.css';
 
-import toDoListManage from './toDo';
+import { createToDo, toDoListManage } from './toDo';
+import { createNote, notesListManage } from './notes';
+import sideBarManage from './sideBar';
 
-const t = toDoListManage();
-console.log(t);
+import { sideBarScreenHandler } from './screenHandler';
+
+const t = sideBarManage();
+
+const toDo = toDoListManage();
+const notes = notesListManage();
+const sideBar = sideBarManage(toDo, notes);
+
+toDo.initializeToDoList();
+notes.initializeNotesList();
+
+console.log('before: ');
+console.table(sideBar.getSideBarListItems());
+sideBar.updateSideBarNumber();
+console.log('added number 1st time: ');
+console.table(sideBar.getSideBarListItems());
+const itemToAdd = createToDo('Add sample item', 'sample item to do', '2025-06-12', 'low', 'personal', false);
+sideBarScreenHandler(sideBar);
+toDo.addItemToToDoList(itemToAdd);
+console.log('list category:');
+toDo.getToDoListByCategory('personal');
+sideBar.updateSideBarNumber();
+console.log('added item + update number: ');
+console.table(sideBar.getSideBarListItems());
+sideBarScreenHandler(sideBar);
+
+// ===============================
 
 const addEditModalDateInp = document.querySelector('#addEditModalDateInp');
 const addEditModalBtn = document.querySelector('.addEditModalBtn');
@@ -25,4 +52,5 @@ addEditItemModal.addEventListener('submit', (e) => {
 
 addEditModalBtn.addEventListener('click', () => {
     console.log(addEditModalDateInp.value);
+    // 2025-06-19
 });
