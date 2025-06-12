@@ -36,17 +36,19 @@
     --light_yellow_color: #ffd700;
     --dark_yellow_color: #febe10;
     --blue_color: #00bfff;
-    --light_blue_color: #3ecfff;
+    --light_blue_color: #28c6fb;
     --dark_blue_color: #add8e6;
     --soft_dark_blue_color: #b0e0e6;
+
+    --toDo_Card_Date_min_width: 180px;
 
     --footer_bg_color: #dcdcdcad;
     --footer_bg_hover_color: #cacacab7;
 
     --modal_blur_bg_color: #a29c9ca6;
     --add_edit_modal_min_width: 900px;
-    --add_edit_modal_detail_inp_min_height: 250px;
-    --add_edit_modal_detail_inp_max_height: 350px;
+    --add_edit_modal_detail_inp_min_height: 150px;
+    --add_edit_modal_detail_inp_max_height: 250px;
     --detail_modal_min_width: 600px;
     --detail_modal_max_width: 900px;
 
@@ -498,7 +500,8 @@ body {
 .todoCard:hover {
     box-shadow: var(--card_primary_box_shadow);
     transform: scale(1.01);
-    background-color: var(--footer_bg_color);
+    /* background-color: var(--footer_bg_color); */
+    filter: brightness(1.03);
 }
 
 .todoCard.done {
@@ -527,7 +530,7 @@ body {
 }
 
 .tCardCheckBoxBlank,
-.tCardCheckBoxCheck {
+.tCardCheckBoxChecked {
     display: none;
 }
 
@@ -536,13 +539,13 @@ body {
     color: var(--black_text);
 }
 
-.tCardCheckBoxCheck.show {
+.tCardCheckBoxChecked.show {
     display: flex;
     color: var(--green_color);
 }
 
 .tCardCheckBoxWrapper:hover .tCardCheckBoxBlank.show,
-.tCardCheckBoxWrapper:hover .tCardCheckBoxCheck.show {
+.tCardCheckBoxWrapper:hover .tCardCheckBoxChecked.show {
     color: var(--light_green_color);
 }
 
@@ -621,6 +624,7 @@ body {
 
 .tCardDate {
     font-weight: 500;
+    min-width: var(--toDo_Card_Date_min_width);
 }
 
 .tCardEditWrapper,
@@ -914,6 +918,9 @@ body {
 .addEditModalTitleInp,
 .addEditModalDetailInp,
 .addEditModalDateInp,
+.addEditModalProjectLabel,
+.addEditModalProjectSelect,
+.addEditModalProjectOption,
 .addEditModalDateLabel,
 .addEditModalPriorityLabel {
     font-size: 2rem;
@@ -1017,15 +1024,38 @@ body {
     border-radius: 6px;
 }
 
-.addEditModalPriorityLabel {
+.addEditModalProjectLabel {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
     place-self: center start;
 }
 
-.addEditModalPriorityWrapper {
+.addEditModalProjectSelect {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
+
+    place-self: center start;
+    padding: 0.2em 0.6em;
+
+    border: 1px solid var(--black_text);
+    border-radius: 6px;
+    text-transform: capitalize;
+}
+
+.addEditModalProjectOption {
+    text-transform: capitalize;
+    padding: 0.4em 0.6em;
+}
+
+.addEditModalPriorityLabel {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    place-self: center start;
+}
+
+.addEditModalPriorityWrapper {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
 
     font-size: 1rem;
     display: flex;

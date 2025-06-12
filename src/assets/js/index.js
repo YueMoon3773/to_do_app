@@ -9,11 +9,11 @@
 
 import '../css/styles.css';
 
-import { createToDo, toDoListManage } from './toDo';
+import { createToDo, toDoListManage, toDoCardRenderer } from './toDo';
 import { createNote, notesListManage } from './notes';
 import sideBarManage from './sideBar';
 
-import { sideBarScreenHandler } from './screenHandler';
+import { sideBarListScreenHandler, toDoCardsListScreenRenderer } from './screenHandler';
 
 const t = sideBarManage();
 
@@ -24,20 +24,28 @@ const sideBar = sideBarManage(toDo, notes);
 toDo.initializeToDoList();
 notes.initializeNotesList();
 
-console.log('before: ');
-console.table(sideBar.getSideBarListItems());
+// SIDE BAR LOGIC
+// console.log('before: ');
+// console.table(sideBar.getSideBarListItems());
 sideBar.updateSideBarNumber();
-console.log('added number 1st time: ');
-console.table(sideBar.getSideBarListItems());
+sideBarListScreenHandler(sideBar);
+// console.log('added number 1st time: ');
+// console.table(sideBar.getSideBarListItems());
+
 const itemToAdd = createToDo('Add sample item', 'sample item to do', '2025-06-12', 'low', 'personal', false);
-sideBarScreenHandler(sideBar);
+sideBarListScreenHandler(sideBar);
 toDo.addItemToToDoList(itemToAdd);
-console.log('list category:');
-toDo.getToDoListByCategory('personal');
+
+// console.log('list category:');
+// toDo.getToDoListByCategory('personal');
+
 sideBar.updateSideBarNumber();
-console.log('added item + update number: ');
-console.table(sideBar.getSideBarListItems());
-sideBarScreenHandler(sideBar);
+sideBarListScreenHandler(sideBar);
+// console.log('added item + update number: ');
+// console.table(sideBar.getSideBarListItems());
+
+// TO DO LOGIC
+toDoCardsListScreenRenderer(toDo);
 
 // ===============================
 
