@@ -13,11 +13,14 @@ const DOMsideBarList = document.querySelector('.sideList');
 const DOMtodoWrapper = document.querySelector('.todoWrapper');
 const DOMnotesWrapper = document.querySelector('.notesWrapper');
 
-const sideBarListScreenHandler = (sideBar) => {
+const sideBarListScreenHandler = (sideBar, sideBarActiveCategory = 'home') => {
     DOMsideBarList.innerHTML = '';
     sideBar.getSideBarListItems().forEach((sideBarItem) => {
         const DOMsideItem = document.createElement('li');
         DOMsideItem.classList.add('sideItem');
+        if (sideBarItem.text === sideBarActiveCategory) {
+            DOMsideItem.classList.add('active');
+        }
         DOMsideItem.dataset.type = `${sideBarItem.text}`;
         const DOMsideItemContentWrapper = document.createElement('div');
         DOMsideItemContentWrapper.classList.add('sideItemContentWrapper');
@@ -41,6 +44,9 @@ const sideBarListScreenHandler = (sideBar) => {
                 const DOMsideProjectItem = document.createElement('li');
                 DOMsideProjectItem.classList.add('sideProjectItem');
                 DOMsideProjectItem.dataset.type = `${projectItem.text}`;
+                if (projectItem.text === sideBarActiveCategory) {
+                    DOMsideProjectItem.classList.add('active');
+                }
                 const DOMprojectItemText = document.createElement('span');
                 DOMprojectItemText.classList.add('projectItemText');
                 DOMprojectItemText.innerText = projectItem.text;

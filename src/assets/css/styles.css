@@ -235,6 +235,10 @@ body {
     cursor: pointer;
 }
 
+.sideItem.active .sideItemText {
+    color: var(--primary_color);
+}
+
 .sideItemContentWrapper {
     display: flex;
     align-items: center;
@@ -309,6 +313,10 @@ body {
     transition-property: all;
     transition-duration: 600ms;
     transition-timing-function: ease;
+}
+
+.sideProjectItem.active .projectItemText{
+    color: var(--primary_color);
 }
 
 .projectItemNumber {
