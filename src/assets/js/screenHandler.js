@@ -15,7 +15,7 @@ const DOMnotesWrapper = document.querySelector('.notesWrapper');
 
 const sideBarListScreenHandler = (sideBar, sideBarActiveCategory = 'home') => {
     DOMsideBarList.innerHTML = '';
-    sideBar.getSideBarListItems().forEach((sideBarItem) => {
+    sideBar.getSideBarItemsList().forEach((sideBarItem) => {
         const DOMsideItem = document.createElement('li');
         DOMsideItem.classList.add('sideItem');
         if (sideBarItem.text === sideBarActiveCategory) {
@@ -73,8 +73,8 @@ const toDoCardRenderer = (
     toDoCardState,
     tCardCheckBoxBlankState,
     tCardCheckBoxCheckedState,
-    title,
-    dueDate,
+    toDoCardTitle,
+    toDoCardDueDate,
 ) => {
     const DOMtodoCard = document.createElement('div');
     DOMtodoCard.classList.add('todoCard');
@@ -104,7 +104,7 @@ const toDoCardRenderer = (
     const DOMtCardCheckBoxChecked = SVGIconTemplate().tCardCheckBoxChecked(tCardCheckBoxCheckedState);
     const DOMtCardHeading = document.createElement('h4');
     DOMtCardHeading.classList.add('tCardHeading');
-    DOMtCardHeading.innerText = title;
+    DOMtCardHeading.innerText = toDoCardTitle;
 
     // Card right side + right side detail element
     const DOMtCardRight = document.createElement('div');
@@ -121,7 +121,7 @@ const toDoCardRenderer = (
 
     const DOMtCardDate = document.createElement('span');
     DOMtCardDate.classList.add('tCardDate');
-    DOMtCardDate.innerText = format(dueDate, 'iii - MMM do yyy');
+    DOMtCardDate.innerText = format(toDoCardDueDate, 'iii - MMM do yyy');
     const DOMtCardEditWrapper = document.createElement('div');
     DOMtCardEditWrapper.classList.add('tCardEditWrapper');
     DOMtCardEditWrapper.addEventListener('click', () => {
@@ -198,20 +198,101 @@ const toDoCardStatesHandler = (toDoCompleteStatus, toDoPriority) => {
     };
 };
 
-const toDoCardsListScreenRenderer = (toDo, renderCategoryType, renderCardFunction) => {
+const toDoCardsListScreenRenderer = (toDo, sideBar, renderCategoryType = 'javascript', renderCardFunction) => {
     DOMtodoWrapper.innerHTML = '';
-    toDo.getToDoList().forEach((toDoItem, index) => {
-        toDoCardRenderer(
-            DOMtodoWrapper,
-            toDoItem.id,
-            toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
-            toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtoDoCardState,
-            toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxBlankState,
-            toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxCheckedState,
-            toDoItem.title,
-            toDoItem.dueDate,
-        );
+
+    const sideBarProjectItemsList = sideBar.getSideBarProjectItemsList();
+    if (renderCategoryType.toLowerCase() === 'home' || renderCategoryType.toLowerCase() === 'project') {
+        toDo.getToDoList().forEach((toDoItem) => {
+            toDoCardRenderer(
+                DOMtodoWrapper,
+                toDoItem.id,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtoDoCardState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxBlankState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxCheckedState,
+                toDoItem.title,
+                toDoItem.dueDate,
+            );
+        });
+    } else if (renderCategoryType.toLowerCase() === 'today') {
+        sideBar.getTodayValue().list.forEach((toDoItem) => {
+            toDoCardRenderer(
+                DOMtodoWrapper,
+                toDoItem.id,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtoDoCardState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxBlankState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxCheckedState,
+                toDoItem.title,
+                toDoItem.dueDate,
+            );
+        });
+    } else if (renderCategoryType.toLowerCase() === 'week') {
+        sideBar.getWeekValue().list.forEach((toDoItem) => {
+            toDoCardRenderer(
+                DOMtodoWrapper,
+                toDoItem.id,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtoDoCardState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxBlankState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxCheckedState,
+                toDoItem.title,
+                toDoItem.dueDate,
+            );
+        });
+    } else if (sideBarProjectItemsList.includes(renderCategoryType.toLowerCase())) {
+        toDo.getToDoListByCategory(renderCategoryType.toLowerCase()).forEach((toDoItem) => {
+            toDoCardRenderer(
+                DOMtodoWrapper,
+                toDoItem.id,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtoDoCardState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxBlankState,
+                toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtCardCheckBoxCheckedState,
+                toDoItem.title,
+                toDoItem.dueDate,
+            );
+        });
+    }
+};
+
+const noteCardRenderer = (parentElement, noteCardId, noteCardTittle, noteCardDetail) => {
+    const DOMnoteCard = document.createElement('div');
+    DOMnoteCard.classList.add('noteCard');
+    DOMnoteCard.dataset.id = `${noteCardId}`;
+    const DOMnoteCardHeaderWrapper = document.createElement('div');
+    DOMnoteCardHeaderWrapper.classList.add('noteCardHeaderWrapper');
+    const DOMnoteHeading = document.createElement('h2');
+    DOMnoteHeading.classList.add('noteHeading');
+    DOMnoteHeading.innerText = noteCardTittle;
+
+    const DOMnoteCardCloseBtnWrapper = document.createElement('div');
+    DOMnoteCardCloseBtnWrapper.classList.add('noteCardCloseBtnWrapper');
+    const DOMnoteCloseBtnIcon = SVGIconTemplate().noteCloseBtnIcon();
+
+    const DOMnoteCardContentWrapper = document.createElement('div');
+    DOMnoteCardContentWrapper.classList.add('noteCardContentWrapper');
+    const DOMnoteCardContent = document.createElement('p');
+    DOMnoteCardContent.classList.add('noteCardContent');
+    DOMnoteCardContent.innerText = noteCardDetail;
+
+    // Append child to card
+    DOMnoteCardCloseBtnWrapper.insertAdjacentHTML('afterbegin', DOMnoteCloseBtnIcon);
+    DOMnoteCardHeaderWrapper.appendChild(DOMnoteHeading);
+    DOMnoteCardHeaderWrapper.appendChild(DOMnoteCardCloseBtnWrapper);
+    DOMnoteCardContentWrapper.appendChild(DOMnoteCardContent);
+
+    DOMnoteCard.appendChild(DOMnoteCardHeaderWrapper);
+    DOMnoteCard.appendChild(DOMnoteCardContentWrapper);
+    parentElement.appendChild(DOMnoteCard);
+};
+
+const noteCardsListScreenRenderer = (notes) => {
+    DOMnotesWrapper.innerHTML = '';
+    notes.getNotesList().forEach((noteItem) => {
+        noteCardRenderer(DOMnotesWrapper, noteItem.id, noteItem.title, noteItem.detail);
     });
 };
 
-export { sideBarListScreenHandler, toDoCardsListScreenRenderer };
+export { sideBarListScreenHandler, toDoCardsListScreenRenderer, noteCardsListScreenRenderer };

@@ -28,7 +28,7 @@ const toDoListManage = () => {
         createToDo(
             'Go jogging',
             "Do this; that; these and those. Don't forget to do it also",
-            '2025-06-14',
+            '2025-06-13',
             'high',
             'personal',
             true,
@@ -264,7 +264,7 @@ const toDoListManage = () => {
         createToDo(
             'JSON',
             'magna aliqua. Ut enim ad minim veniam, quis nostrud exercit',
-            '2025-06-12',
+            '2025-06-14',
             'high',
             'javascript',
             true,

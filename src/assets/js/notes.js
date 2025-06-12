@@ -1,9 +1,9 @@
 import storageAvailable from './localStorageVerify';
 
-const createNote = (tittle, detail) => {
+const createNote = (title, detail) => {
     const note = {
         id: crypto.randomUUID(),
-        tittle,
+        title,
         detail,
         type: 'note',
     };

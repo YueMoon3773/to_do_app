@@ -5,6 +5,8 @@
     - Create an empty arr and store each to do in
     - update/get the to do
 3. a module to render to screen
+
+AI: Add listener to side bar items
 */
 
 import '../css/styles.css';
@@ -13,7 +15,7 @@ import { createToDo, toDoListManage, toDoCardRenderer } from './toDo';
 import { createNote, notesListManage } from './notes';
 import sideBarManage from './sideBar';
 
-import { sideBarListScreenHandler, toDoCardsListScreenRenderer } from './screenHandler';
+import { sideBarListScreenHandler, toDoCardsListScreenRenderer, noteCardsListScreenRenderer } from './screenHandler';
 
 const t = sideBarManage();
 
@@ -26,11 +28,11 @@ notes.initializeNotesList();
 
 // SIDE BAR LOGIC
 // console.log('before: ');
-// console.table(sideBar.getSideBarListItems());
+// console.table(sideBar.getSideBarItemsList());
 sideBar.updateSideBarNumber();
 sideBarListScreenHandler(sideBar);
 // console.log('added number 1st time: ');
-// console.table(sideBar.getSideBarListItems());
+// console.table(sideBar.getSideBarItemsList());
 
 const itemToAdd = createToDo('Add sample item', 'sample item to do', '2025-06-12', 'low', 'personal', false);
 sideBarListScreenHandler(sideBar);
@@ -42,10 +44,12 @@ toDo.addItemToToDoList(itemToAdd);
 sideBar.updateSideBarNumber();
 sideBarListScreenHandler(sideBar);
 // console.log('added item + update number: ');
-// console.table(sideBar.getSideBarListItems());
+// console.table(sideBar.getSideBarItemsList());
 
 // TO DO LOGIC
-toDoCardsListScreenRenderer(toDo);
+toDoCardsListScreenRenderer(toDo, sideBar);
+
+noteCardsListScreenRenderer(notes);
 
 // ===============================
 

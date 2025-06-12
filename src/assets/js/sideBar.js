@@ -7,7 +7,7 @@ const sideBarManage = (toDo, notes) => {
     // const toDo = toDoListManage();
     // const notes = notesListManage();
 
-    let sideBarListItems = [
+    let sideBarItemsList = [
         {
             text: 'home',
             number: 0,
@@ -48,8 +48,8 @@ const sideBarManage = (toDo, notes) => {
         },
     ];
 
-    const getSideBarListItems = () => {
-        return sideBarListItems;
+    const getSideBarItemsList = () => {
+        return sideBarItemsList;
     };
 
     const addSideBarProjectChild = (projectTitle) => {
@@ -58,7 +58,16 @@ const sideBarManage = (toDo, notes) => {
             number: 0,
         };
 
-        getSideBarListItems()[3].child.push(projectChild);
+        getSideBarItemsList()[3].child.push(projectChild);
+    };
+
+    const getSideBarProjectItemsList = () => {
+        let projectItemsList = [];
+        getSideBarItemsList()[3].child.forEach((projectItem) => {
+            projectItemsList.push(projectItem.text.toLowerCase());
+        });
+        // console.log(projectItemsList);
+        return projectItemsList;
     };
 
     const getTodayValue = () => {
@@ -96,7 +105,7 @@ const sideBarManage = (toDo, notes) => {
     };
 
     const updateSideBarNumber = () => {
-        getSideBarListItems().forEach((sideBarItem) => {
+        getSideBarItemsList().forEach((sideBarItem) => {
             if (sideBarItem.text === 'home') {
                 sideBarItem.number = toDo.getToDoList().length;
             } else if (sideBarItem.text === 'today') {
@@ -112,16 +121,17 @@ const sideBarManage = (toDo, notes) => {
                 });
             }
         });
-        // console.log(sideBarListItems);
+        // console.log(sideBarItemsList);
     };
 
     // addSideBarProjectChild('test');
     // updateSideBarNumber();
-    // console.log(getSideBarListItems());
+    // console.log(getSideBarItemsList());
 
     return {
-        getSideBarListItems,
+        getSideBarItemsList,
         addSideBarProjectChild,
+        getSideBarProjectItemsList,
         getTodayValue,
         getWeekValue,
         updateSideBarNumber,

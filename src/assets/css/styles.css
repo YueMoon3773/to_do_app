@@ -25,7 +25,7 @@
     --light_gray_color: #eeeeee;
     --dark_gray_color: #808080;
     --primary_color: #ff6449;
-    --light_primary_color: #f5715a;
+    --light_primary_color: #f77a64;
     --light_green_color: #1bff14;
     --green_color: #32de84;
     --dark_green_color: #03c04a;
@@ -315,7 +315,7 @@ body {
     transition-timing-function: ease;
 }
 
-.sideProjectItem.active .projectItemText{
+.sideProjectItem.active .projectItemText {
     color: var(--primary_color);
 }
 
@@ -422,7 +422,7 @@ body {
 .sideItem:hover .sideItemText,
 .sideProjectItem:hover .projectItemText {
     transform: translate(0.4em, 0.1em);
-    color: var(--primary_color);
+    color: var(--light_primary_color);
     font-weight: 500;
 }
 
@@ -695,10 +695,13 @@ body {
     font-size: 1rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(246px, 1fr));
+    /* grid-template-rows: repeat(auto-fit, 1fr); */
     gap: 2em;
 }
 
 .noteCard {
+    min-height: 100%;
     max-height: 246px;
     font-size: 1rem;
     padding: 1.6em 2em;
