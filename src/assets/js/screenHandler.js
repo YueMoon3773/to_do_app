@@ -9,12 +9,257 @@
 import { format } from 'date-fns';
 import SVGIconTemplate from './svgIconTemplate';
 
-const DOMsideBarList = document.querySelector('.sideList');
-const DOMtodoWrapper = document.querySelector('.todoWrapper');
-const DOMnotesWrapper = document.querySelector('.notesWrapper');
+import {
+    modalWrapper,
+    addEditItemFormModal,
+    addEditModalHeadingAction,
+    addEditModalHeadingType,
+    addEditModalDetailLabel,
+    addEditModalDetailInp,
+    addEditModalBodyBottom,
+    addEditModalBtnAction,
+    addEditModalBtnType,
+    detailModal,
+} from './index';
 
-const sideBarListScreenHandler = (sideBar, sideBarActiveCategory = 'home') => {
-    DOMsideBarList.innerHTML = '';
+// STATES HANDLER FUNCTIONS
+const modalStates = [
+    {
+        action: 'add',
+        type: 'toDo',
+        detailModalVisibility: false,
+        formModalVisibility: true,
+        formModalHeadingActionText: 'Create a new',
+        formModalTypeText: 'To Do',
+        formModalDetailVisibility: true,
+        formModalBodyBottomVisibility: true,
+        formModalFooterBtnActionText: 'Add',
+    },
+    {
+        action: 'add',
+        type: 'project',
+        detailModalVisibility: false,
+        formModalVisibility: true,
+        formModalHeadingActionText: 'Create a new',
+        formModalTypeText: 'Project',
+        formModalDetailVisibility: false,
+        formModalBodyBottomVisibility: false,
+        formModalFooterBtnActionText: 'Add',
+    },
+    {
+        action: 'add',
+        type: 'note',
+        detailModalVisibility: false,
+        formModalVisibility: true,
+        formModalHeadingActionText: 'Create a new',
+        formModalTypeText: 'Note',
+        formModalDetailVisibility: true,
+        formModalBodyBottomVisibility: false,
+        formModalFooterBtnActionText: 'Add',
+    },
+    {
+        action: 'edit',
+        type: 'toDo',
+        detailModalVisibility: false,
+        formModalVisibility: true,
+        formModalHeadingActionText: 'Modify',
+        formModalTypeText: 'To Do',
+        formModalDetailVisibility: true,
+        formModalBodyBottomVisibility: true,
+        formModalFooterBtnActionText: 'Change',
+    },
+    {
+        action: 'detail',
+        type: 'toDo',
+        detailModalVisibility: true,
+        formModalVisibility: false,
+        formModalHeadingActionText: '',
+        formModalTypeText: '',
+        formModalDetailVisibility: false,
+        formModalBodyBottomVisibility: false,
+        formModalFooterBtnActionText: '',
+    },
+];
+
+const getModalStates = () => {
+    return modalStates;
+};
+
+const modalPartsDisplayStatesHandler = (
+    action,
+    type,
+    formModal,
+    formModalDetailLabel,
+    formModalDetailInp,
+    formModalBodyBottom,
+    detailModal,
+) => {
+    getModalStates().forEach((modalState) => {
+        if (modalState.action === action && modalState.type === type) {
+            if (modalState.detailModalVisibility === false) {
+                if (detailModal.classList.contains('show')) {
+                    detailModal.classList.remove('show');
+                }
+            } else {
+                if (!detailModal.classList.contains('show')) {
+                    detailModal.classList.add('show');
+                }
+            }
+
+            if (modalState.formModalVisibility === false) {
+                if (formModal.classList.contains('show')) {
+                    formModal.classList.remove('show');
+                }
+            } else {
+                if (!formModal.classList.contains('show')) {
+                    formModal.classList.add('show');
+                }
+            }
+
+            if (modalState.formModalDetailVisibility === false) {
+                if (formModalDetailLabel.classList.contains('show') && formModalDetailInp.classList.contains('show')) {
+                    formModalDetailLabel.classList.remove('show');
+                    formModalDetailInp.classList.remove('show');
+                }
+            } else {
+                if (
+                    !(formModalDetailLabel.classList.contains('show') && formModalDetailInp.classList.contains('show'))
+                ) {
+                    formModalDetailLabel.classList.add('show');
+                    formModalDetailInp.classList.add('show');
+                }
+            }
+
+            if (modalState.formModalBodyBottomVisibility === false) {
+                if (formModalBodyBottom.classList.contains('show')) {
+                    formModalBodyBottom.classList.remove('show');
+                }
+            } else {
+                if (!formModalBodyBottom.classList.contains('show')) {
+                    formModalBodyBottom.classList.add('show');
+                }
+            }
+        }
+    });
+};
+
+const modalFormBaseTextStatesHandler = (
+    action,
+    type,
+    formHeadingAction,
+    formHeadingType,
+    formFooterBtnAction,
+    formFooterBtnType,
+) => {
+    getModalStates().forEach((modalState) => {
+        if (modalState.action === action && modalState.type === type) {
+            formHeadingAction.innerText = modalState.formModalHeadingActionText;
+            formHeadingType.innerText = modalState.formModalTypeText;
+            formFooterBtnAction.innerText = modalState.formModalFooterBtnActionText;
+            formFooterBtnType.innerText = modalState.formModalTypeText;
+        }
+    });
+};
+
+const toDoCardStatesHandler = (toDoCompleteStatus, toDoPriority) => {
+    let DOMtodoCardPriority = 'importantLow';
+    let DOMtoDoCardState = 'done';
+    let DOMtCardCheckBoxBlankState = 'show';
+    let DOMtCardCheckBoxCheckedState = 'show';
+
+    if (toDoCompleteStatus === false) {
+        DOMtCardCheckBoxBlankState = 'show';
+        DOMtCardCheckBoxCheckedState = '';
+        DOMtoDoCardState = '';
+    } else {
+        DOMtCardCheckBoxBlankState = '';
+        DOMtCardCheckBoxCheckedState = 'show';
+        DOMtoDoCardState = 'done';
+    }
+
+    switch (toDoPriority) {
+        case 'low':
+            DOMtodoCardPriority = 'importantLow';
+            break;
+        case 'medium':
+            DOMtodoCardPriority = 'importantMed';
+            break;
+        case 'high':
+            DOMtodoCardPriority = 'importantHigh';
+            break;
+        default:
+            DOMtodoCardPriority = '';
+            break;
+    }
+
+    return {
+        DOMtodoCardPriority,
+        DOMtoDoCardState,
+        DOMtCardCheckBoxBlankState,
+        DOMtCardCheckBoxCheckedState,
+    };
+};
+
+// CLICK LOGICAL + APPEARANCE FUNCTIONS
+const formModalMainTextContent = (id) => {};
+
+const sideBarItemClickHandler = () => {};
+
+const toDoCheckBoxBtnHandler = () => {};
+
+const toDoDetailBtnHandler = () => {
+    modalPartsDisplayStatesHandler(
+        'detail',
+        'toDo',
+        addEditItemFormModal,
+        addEditModalDetailLabel,
+        addEditModalDetailInp,
+        addEditModalBodyBottom,
+        detailModal,
+    );
+    showModal(modalWrapper);
+};
+
+const toDoEditBtnHandler = () => {
+    modalFormBaseTextStatesHandler(
+        'edit',
+        'toDo',
+        addEditModalHeadingAction,
+        addEditModalHeadingType,
+        addEditModalBtnAction,
+        addEditModalBtnType,
+    );
+    modalPartsDisplayStatesHandler(
+        'edit',
+        'toDo',
+        addEditItemFormModal,
+        addEditModalDetailLabel,
+        addEditModalDetailInp,
+        addEditModalBodyBottom,
+        detailModal,
+    );
+    showModal(modalWrapper);
+};
+
+const toDoDeleteBtnHandler = () => {};
+
+const noteCardDeleteBtnHandler = () => {};
+
+const showModal = (modalWrapper) => {
+    if (!modalWrapper.classList.contains('show')) {
+        modalWrapper.classList.add('show');
+    }
+};
+
+const hideModal = (modalWrapper) => {
+    if (modalWrapper.classList.contains('show')) {
+        modalWrapper.classList.remove('show');
+    }
+};
+
+// RENDER TO SCREEN FUNCTIONS AND THEIR RELATED LOGICAL FUNCTIONS
+const sideBarListScreenHandler = (DOMsideBar, sideBar, sideBarActiveCategory = 'home') => {
+    DOMsideBar.innerHTML = '';
     sideBar.getSideBarItemsList().forEach((sideBarItem) => {
         const DOMsideItem = document.createElement('li');
         DOMsideItem.classList.add('sideItem');
@@ -22,6 +267,10 @@ const sideBarListScreenHandler = (sideBar, sideBarActiveCategory = 'home') => {
             DOMsideItem.classList.add('active');
         }
         DOMsideItem.dataset.type = `${sideBarItem.text}`;
+        DOMsideItem.addEventListener('click', () => {
+            sideBarItemClickHandler();
+        });
+
         const DOMsideItemContentWrapper = document.createElement('div');
         DOMsideItemContentWrapper.classList.add('sideItemContentWrapper');
         // DOMsideItemContentWrapper.dataset.type = `${sideBarItem.text}`;
@@ -47,6 +296,10 @@ const sideBarListScreenHandler = (sideBar, sideBarActiveCategory = 'home') => {
                 if (projectItem.text === sideBarActiveCategory) {
                     DOMsideProjectItem.classList.add('active');
                 }
+                DOMsideProjectItem.addEventListener('click', () => {
+                    sideBarItemClickHandler();
+                });
+
                 const DOMprojectItemText = document.createElement('span');
                 DOMprojectItemText.classList.add('projectItemText');
                 DOMprojectItemText.innerText = projectItem.text;
@@ -62,7 +315,7 @@ const sideBarListScreenHandler = (sideBar, sideBarActiveCategory = 'home') => {
             DOMsideItem.appendChild(DOMsideProjectList);
         }
 
-        DOMsideBarList.appendChild(DOMsideItem);
+        DOMsideBar.appendChild(DOMsideItem);
     });
 };
 
@@ -159,46 +412,13 @@ const toDoCardRenderer = (
     parentElement.appendChild(DOMtodoCard);
 };
 
-const toDoCardStatesHandler = (toDoCompleteStatus, toDoPriority) => {
-    let DOMtodoCardPriority = 'importantLow';
-    let DOMtoDoCardState = 'done';
-    let DOMtCardCheckBoxBlankState = 'show';
-    let DOMtCardCheckBoxCheckedState = 'show';
-
-    if (toDoCompleteStatus === false) {
-        DOMtCardCheckBoxBlankState = 'show';
-        DOMtCardCheckBoxCheckedState = '';
-        DOMtoDoCardState = '';
-    } else {
-        DOMtCardCheckBoxBlankState = '';
-        DOMtCardCheckBoxCheckedState = 'show';
-        DOMtoDoCardState = 'done';
-    }
-
-    switch (toDoPriority) {
-        case 'low':
-            DOMtodoCardPriority = 'importantLow';
-            break;
-        case 'medium':
-            DOMtodoCardPriority = 'importantMed';
-            break;
-        case 'high':
-            DOMtodoCardPriority = 'importantHigh';
-            break;
-        default:
-            DOMtodoCardPriority = '';
-            break;
-    }
-
-    return {
-        DOMtodoCardPriority,
-        DOMtoDoCardState,
-        DOMtCardCheckBoxBlankState,
-        DOMtCardCheckBoxCheckedState,
-    };
-};
-
-const toDoCardsListScreenRenderer = (toDo, sideBar, renderCategoryType = 'javascript', renderCardFunction) => {
+const toDoCardsListScreenRenderer = (
+    DOMtodoWrapper,
+    toDo,
+    sideBar,
+    renderCategoryType = 'home',
+    renderCardFunction,
+) => {
     DOMtodoWrapper.innerHTML = '';
 
     const sideBarProjectItemsList = sideBar.getSideBarProjectItemsList();
@@ -266,16 +486,21 @@ const noteCardRenderer = (parentElement, noteCardId, noteCardTittle, noteCardDet
     const DOMnoteHeading = document.createElement('h2');
     DOMnoteHeading.classList.add('noteHeading');
     DOMnoteHeading.innerText = noteCardTittle;
+    DOMnoteHeading.setAttribute('contenteditable', 'true');
 
     const DOMnoteCardCloseBtnWrapper = document.createElement('div');
     DOMnoteCardCloseBtnWrapper.classList.add('noteCardCloseBtnWrapper');
     const DOMnoteCloseBtnIcon = SVGIconTemplate().noteCloseBtnIcon();
+    DOMnoteCardCloseBtnWrapper.addEventListener('click', () => {
+        noteCardDeleteBtnHandler();
+    });
 
     const DOMnoteCardContentWrapper = document.createElement('div');
     DOMnoteCardContentWrapper.classList.add('noteCardContentWrapper');
     const DOMnoteCardContent = document.createElement('p');
     DOMnoteCardContent.classList.add('noteCardContent');
     DOMnoteCardContent.innerText = noteCardDetail;
+    DOMnoteCardContent.setAttribute('contenteditable', 'true');
 
     // Append child to card
     DOMnoteCardCloseBtnWrapper.insertAdjacentHTML('afterbegin', DOMnoteCloseBtnIcon);
@@ -288,11 +513,19 @@ const noteCardRenderer = (parentElement, noteCardId, noteCardTittle, noteCardDet
     parentElement.appendChild(DOMnoteCard);
 };
 
-const noteCardsListScreenRenderer = (notes) => {
+const noteCardsListScreenRenderer = (DOMnotesWrapper, notes) => {
     DOMnotesWrapper.innerHTML = '';
     notes.getNotesList().forEach((noteItem) => {
         noteCardRenderer(DOMnotesWrapper, noteItem.id, noteItem.title, noteItem.detail);
     });
 };
 
-export { sideBarListScreenHandler, toDoCardsListScreenRenderer, noteCardsListScreenRenderer };
+export {
+    sideBarListScreenHandler,
+    toDoCardsListScreenRenderer,
+    noteCardsListScreenRenderer,
+    showModal,
+    hideModal,
+    modalFormBaseTextStatesHandler,
+    modalPartsDisplayStatesHandler,
+};

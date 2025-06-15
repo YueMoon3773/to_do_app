@@ -18,11 +18,11 @@
         <div class="app">
             <!-- NAVBAR SECTION  -->
             <nav class="navBar">
-                <div class="menuWrapper">
+                <!-- <div class="menuWrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="menuIcon">
                         <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
                     </svg>
-                </div>
+                </div> -->
                 <div class="logoWrapper">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -103,9 +103,9 @@
                     <title class="sideBtnTitle">Add Item</title>
 
                     <ul class="sideBtnAddList">
-                        <li class="sideBtnAddItem" value="toDo">To Do task</li>
-                        <li class="sideBtnAddItem" value="project">Project</li>
-                        <li class="sideBtnAddItem" value="note">Note</li>
+                        <li role="button" class="sideBtnAddItem" data-action="add" data-type="toDo">To Do task</li>
+                        <li role="button" class="sideBtnAddItem" data-action="add" data-type="project">Project</li>
+                        <li role="button" class="sideBtnAddItem" data-action="add" data-type="note">Note</li>
                     </ul>
                 </div>
             </aside>
@@ -113,7 +113,7 @@
             <!-- MAIN CONTENT SECTION  -->
             <div class="content">
                 <!-- TO DO SECTION  -->
-                <div class="todoWrapper">
+                <div class="todoWrapper show">
                     <!-- <div class="todoCard importantMed">
                         <div class="tCardLeft">
                             <div class="tCardCheckBoxWrapper">
@@ -188,7 +188,7 @@
                 </div>
 
                 <!-- NOTES SECTION  -->
-                <div class="notesWrapper show">
+                <div class="notesWrapper">
                     <!-- <div class="noteCard">
                         <div class="noteCardHeaderWrapper">
                             <h2 contenteditable="true" class="noteHeading">
@@ -244,10 +244,10 @@
         <div class="modalWrapper">
             <div class="modal">
                 <!-- MODAL FORM FOR ADD/EDIT TO-DO; PRJ; NOTE  -->
-                <form action="" data-action="add" class="addEditItemModal show">
+                <form action="" data-action="add" class="addEditItemFormModal show">
                     <h2 class="addEditModalHeading">
                         <span class="addEditModalHeadingAction"> Create a new </span>
-                        <span class="addEditModalHeadingType">PROJECT</span>
+                        <span class="addEditModalHeadingType">project</span>
                     </h2>
 
                     <div class="addEditModalBody">
@@ -307,7 +307,7 @@
                     <div class="addEditModalFooter">
                         <button class="addEditModalBtn">
                             <span class="addEditModalBtnAction">Add</span>
-                            <span class="addEditModalBtnType">Project</span>
+                            <span class="addEditModalBtnType">project</span>
                         </button>
                     </div>
                 </form>
