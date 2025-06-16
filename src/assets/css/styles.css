@@ -849,9 +849,6 @@ body {
     background-color: var(--modal_blur_bg_color);
     backdrop-filter: blur(10px);
 
-    /* display: none;
-    animation: appear 100ms ease; */
-
     display: none;
     opacity: 0;
     animation: vanish 160ms ease;
@@ -861,7 +858,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* animation: vanish 600ms ease; */
 
     opacity: 1;
     animation: appear 660ms ease;
@@ -1092,39 +1088,63 @@ body {
     border-color: transparent;
     background-color: transparent;
     cursor: pointer;
+    transition: all 260ms ease;
 }
 
-.addEditModalPriorityBtn[value='low'] {
+.addEditModalPriorityBtn:hover {
+    transform: scale(1.06);
+    filter: brightness(1.1);
+}
+
+.addEditModalPriorityBtn[data-value='low'] {
     color: var(--green_color);
     border: 2px solid var(--green_color);
 }
 
-.addEditModalPriorityBtn[value='low']:hover {
+.addEditModalPriorityBtn[data-value='low']:hover {
     color: var(--white_text);
     border: 2px solid var(--light_green_color);
     background-color: var(--light_green_color);
 }
 
-.addEditModalPriorityBtn[value='medium'] {
+.addEditModalPriorityBtn[data-value='low'].active {
+    color: var(--white_text);
+    border: 2px solid var(--dark_green_color);
+    background-color: var(--dark_green_color);
+}
+
+.addEditModalPriorityBtn[data-value='medium'] {
     color: var(--yellow_color);
     border: 2px solid var(--yellow_color);
 }
 
-.addEditModalPriorityBtn[value='medium']:hover {
+.addEditModalPriorityBtn[data-value='medium']:hover {
     color: var(--white_text);
     border: 2px solid var(--light_yellow_color);
     background-color: var(--light_yellow_color);
 }
 
-.addEditModalPriorityBtn[value='high'] {
+.addEditModalPriorityBtn[data-value='medium'].active {
+    color: var(--white_text);
+    border: 2px solid var(--dark_yellow_color);
+    background-color: var(--dark_yellow_color);
+}
+
+.addEditModalPriorityBtn[data-value='high'] {
     color: var(--red_color);
     border: 2px solid var(--red_color);
 }
 
-.addEditModalPriorityBtn[value='high']:hover {
+.addEditModalPriorityBtn[data-value='high']:hover {
     color: var(--white_text);
     border: 2px solid var(--light_red_color);
     background-color: var(--light_red_color);
+}
+
+.addEditModalPriorityBtn[data-value='high'].active {
+    color: var(--white_text);
+    border: 2px solid var(--dark_red_color);
+    background-color: var(--dark_red_color);
 }
 
 .addEditModalFooter {

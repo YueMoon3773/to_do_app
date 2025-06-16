@@ -288,20 +288,6 @@ const toDoListManage = () => {
         return toDoList;
     };
 
-    const getToDoListByCategory = (category = 'personal') => {
-        let ret = getToDoList().filter((toDoItem, index) => {
-            return toDoItem.category === category;
-        });
-        // console.log('ret: ');
-        // console.table(ret);
-
-        return ret;
-    };
-
-    const resetToDoList = () => {
-        toDoList = [];
-    };
-
     const initializeToDoList = () => {
         // Add sample to do items
         if (getToDoList().length === 0) {
@@ -321,6 +307,30 @@ const toDoListManage = () => {
 
             addItemToToDoList(localStorageItem);
         }
+    };
+    // initializeToDoList();
+
+    const getToDoListByCategory = (category = 'personal') => {
+        let ret = getToDoList().filter((toDoItem, index) => {
+            return toDoItem.category === category;
+        });
+        // console.log('ret: ');
+        // console.table(ret);
+
+        return ret;
+    };
+
+    const getToDoItemById = (toDoList, id) => {
+        const ret = toDoList.getToDoList().find((toDoItem) => {
+            return toDoItem.id === id;
+        });
+        // console.log(ret);
+
+        return ret;
+    };
+
+    const resetToDoList = () => {
+        toDoList = [];
     };
 
     const addItemToToDoList = (toDoItem) => {
@@ -367,6 +377,7 @@ const toDoListManage = () => {
     return {
         getToDoList,
         getToDoListByCategory,
+        getToDoItemById,
         resetToDoList,
         deleteToDoItemById,
         initializeToDoList,

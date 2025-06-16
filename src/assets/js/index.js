@@ -21,7 +21,7 @@ import {
     noteCardsListScreenRenderer,
     showModal,
     hideModal,
-    modalFormBaseTextStatesHandler,
+    formModalBaseTextContentHandler,
     modalPartsDisplayStatesHandler,
 } from './screenHandler';
 
@@ -31,16 +31,24 @@ const modal = document.querySelector('.modal');
 export const addEditItemFormModal = document.querySelector('.addEditItemFormModal');
 export const addEditModalHeadingAction = document.querySelector('.addEditModalHeadingAction');
 export const addEditModalHeadingType = document.querySelector('.addEditModalHeadingType');
+export const addEditModalTitleInp = document.querySelector('.addEditModalTitleInp');
 export const addEditModalDetailLabel = document.querySelector('.addEditModalDetailLabel');
-export const addEditModalDetailInp = document.querySelector('.addEditModalDetailInp');
+export const addEditModalDetailInp = document.querySelector('#addEditModalDetailInp');
+
 export const addEditModalBodyBottom = document.querySelector('.addEditModalBodyBottom');
 export const addEditModalBtnAction = document.querySelector('.addEditModalBtnAction');
 export const addEditModalBtnType = document.querySelector('.addEditModalBtnType');
 
-const addEditModalDateInp = document.querySelector('#addEditModalDateInp');
+export const addEditModalDateInp = document.querySelector('#addEditModalDateInp');
+export const addEditModalProjectSelect = document.querySelector('#addEditModalProjectSelect');
+export const modalPriorityBtnLow = document.querySelector('.addEditModalPriorityBtn[data-value="low"]');
+export const modalPriorityBtnMedium = document.querySelector('.addEditModalPriorityBtn[data-value="medium"]');
+export const modalPriorityBtnHigh = document.querySelector('.addEditModalPriorityBtn[data-value="high"]');
 const addEditModalBtn = document.querySelector('.addEditModalBtn');
 
 export const detailModal = document.querySelector('.detailModal');
+export const detailModalHeading = document.querySelector('.detailModalHeading');
+export const detailModalContentWrapper = document.querySelector('.detailModalContentWrapper');
 const modalCloseBtn = document.querySelector('.modalCloseWrapper');
 
 const sideBarList = document.querySelector('.sideList');
@@ -60,6 +68,7 @@ const sideBar = sideBarManage(toDo, notes);
 toDo.initializeToDoList();
 notes.initializeNotesList();
 
+// console.table(toDo.getToDoList());
 // SIDE BAR LOGIC
 // console.log('before: ');
 // console.table(sideBar.getSideBarItemsList());
@@ -109,7 +118,7 @@ addEditModalBtn.addEventListener('click', () => {
 });
 
 sideBarAddToDoBtn.addEventListener('click', () => {
-    modalFormBaseTextStatesHandler(
+    formModalBaseTextContentHandler(
         sideBarAddToDoBtn.dataset.action,
         sideBarAddToDoBtn.dataset.type,
         addEditModalHeadingAction,
@@ -130,7 +139,7 @@ sideBarAddToDoBtn.addEventListener('click', () => {
 });
 
 sideBarAddProjectBtn.addEventListener('click', () => {
-    modalFormBaseTextStatesHandler(
+    formModalBaseTextContentHandler(
         sideBarAddProjectBtn.dataset.action,
         sideBarAddProjectBtn.dataset.type,
         addEditModalHeadingAction,
@@ -151,7 +160,7 @@ sideBarAddProjectBtn.addEventListener('click', () => {
 });
 
 sideBarAddNoteBtn.addEventListener('click', () => {
-    modalFormBaseTextStatesHandler(
+    formModalBaseTextContentHandler(
         sideBarAddNoteBtn.dataset.action,
         sideBarAddNoteBtn.dataset.type,
         addEditModalHeadingAction,

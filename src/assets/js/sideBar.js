@@ -4,9 +4,6 @@ import { notesListManage } from './notes';
 import dateHandler from './datesHandler';
 
 const sideBarManage = (toDo, notes) => {
-    // const toDo = toDoListManage();
-    // const notes = notesListManage();
-
     let sideBarItemsList = [
         {
             text: 'home',
