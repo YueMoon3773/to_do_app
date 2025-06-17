@@ -17,4 +17,24 @@ function storageAvailable(type) {
     }
 }
 
-export default storageAvailable;
+const clearStorage = (type) => {
+    let storage = window[type];
+    storage.clear();
+};
+
+const saveDataToStorage = (type, objData) => {
+    if (storageAvailable(type)) {
+        let storage = window[type];
+        storage.setItem(`${objData.id}`, JSON.stringify(objData));
+    } else {
+        alert('Cannot save date to storage.');
+        return false;
+    }
+};
+
+const deleteDataByKeyFromStorage = (type, objDataKey) => {
+    let storage = window[type];
+    storage.removeItem(objDataKey);
+};
+
+export { storageAvailable, clearStorage, saveDataToStorage, deleteDataByKeyFromStorage };

@@ -1,4 +1,4 @@
-import storageAvailable from './localStorageVerify';
+import { storageAvailable, clearStorage, saveDataToStorage, deleteDataByKeyFromStorage } from './localStorageVerify';
 
 const createToDo = (title, detail, dueDate, priority, category, completeStatus = false) => {
     const toDo = {
@@ -9,7 +9,7 @@ const createToDo = (title, detail, dueDate, priority, category, completeStatus =
         priority,
         category,
         completeStatus,
-        type: 'to-do',
+        type: 'toDo',
     };
 
     return { ...toDo };
@@ -26,20 +26,44 @@ const toDoListManage = () => {
             false,
         ),
         createToDo(
+            'Learn Flex',
+            'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco',
+            '2028-04-24',
+            'high',
+            'css',
+            false,
+        ),
+        createToDo(
             'Go jogging',
             "Do this; that; these and those. Don't forget to do it also",
-            '2025-06-13',
+            '2025-06-17',
             'high',
             'personal',
             true,
+        ),
+        createToDo(
+            'Links and Images',
+            'culpa qui officia deserunt mollit anim id est laborum.',
+            '2028-12-22',
+            'medium',
+            'html',
+            false,
         ),
         createToDo('Buy that charger', '', '2025-08-06', 'low', 'personal', false),
         createToDo(
             'Lorem ipsum dolor',
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed',
-            '2025-08-06',
+            '2025-06-18',
             'low',
             'personal',
+            false,
+        ),
+        createToDo(
+            'Learn objects',
+            'in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non',
+            '2028-06-11',
+            'low',
+            'javascript',
             false,
         ),
         createToDo(
@@ -51,28 +75,20 @@ const toDoListManage = () => {
             false,
         ),
         createToDo(
+            'Functions basic',
+            'occaecat cupidatat non proident, sunt in culpa qui',
+            '2027-11-05',
+            'medium',
+            'javascript',
+            true,
+        ),
+        createToDo(
             'sed do eiusmod',
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
             '2026-10-15',
             'high',
             'personal',
             true,
-        ),
-        createToDo(
-            'Ut enim ad minim veniam',
-            'tempor incididunt ut labore et dolore magna aliqua',
-            '2025-11-25',
-            'low',
-            'personal',
-            false,
-        ),
-        createToDo(
-            'do eiusmod tempor incididunt',
-            'dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
-            '2025-06-30',
-            'medium',
-            'personal',
-            false,
         ),
         createToDo(
             'labore et dolore magna aliqua',
@@ -92,6 +108,22 @@ const toDoListManage = () => {
             true,
         ),
         createToDo(
+            'Object advanced',
+            'velit esse cillum dolore eu fugiat nulla pariatur. Excepteur',
+            '2029-12-19',
+            'high',
+            'javascript',
+            false,
+        ),
+        createToDo(
+            'Factory functions',
+            'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim',
+            '2025-05-15',
+            'high',
+            'javascript',
+            false,
+        ),
+        createToDo(
             'exercitation ullamco',
             'nostrud exercitation ullamco laboris',
             '2035-11-23',
@@ -102,7 +134,7 @@ const toDoListManage = () => {
         createToDo(
             'laboris nisi ut aliquip ex',
             'aliquip ex ea commodo consequat. Duis aute irure dolor',
-            '2025-06-24',
+            '2025-06-19',
             'low',
             'personal',
             false,
@@ -124,28 +156,12 @@ const toDoListManage = () => {
             true,
         ),
         createToDo(
-            'Learn Flex',
-            'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco',
-            '2028-04-24',
-            'high',
-            'css',
-            false,
-        ),
-        createToDo(
             'Working with text',
             'incididunt ut labore et dolore magna aliqua. Ut enim ad',
             '2025-06-19',
             'low',
             'html',
             true,
-        ),
-        createToDo(
-            'Links and Images',
-            'culpa qui officia deserunt mollit anim id est laborum.',
-            '2028-12-22',
-            'medium',
-            'html',
-            false,
         ),
         createToDo(
             'html Boilerplate',
@@ -198,6 +214,22 @@ const toDoListManage = () => {
             false,
         ),
         createToDo(
+            'Ut enim ad minim veniam',
+            'tempor incididunt ut labore et dolore magna aliqua',
+            '2025-11-25',
+            'low',
+            'personal',
+            false,
+        ),
+        createToDo(
+            'do eiusmod tempor incididunt',
+            'dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+            '2025-06-30',
+            'medium',
+            'personal',
+            false,
+        ),
+        createToDo(
             'DOM manipulation and events',
             'nostrud exercitation ullamco laboris nisi ut aliquip ex',
             '2025-11-17',
@@ -210,38 +242,6 @@ const toDoListManage = () => {
             'aute irure dolor in reprehenderit in voluptate velit esse',
             '2026-03-08',
             'low',
-            'javascript',
-            false,
-        ),
-        createToDo(
-            'Learn objects',
-            'in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non',
-            '2028-06-11',
-            'low',
-            'javascript',
-            false,
-        ),
-        createToDo(
-            'Functions basic',
-            'occaecat cupidatat non proident, sunt in culpa qui',
-            '2027-11-05',
-            'medium',
-            'javascript',
-            true,
-        ),
-        createToDo(
-            'Object advanced',
-            'velit esse cillum dolore eu fugiat nulla pariatur. Excepteur',
-            '2029-12-19',
-            'high',
-            'javascript',
-            false,
-        ),
-        createToDo(
-            'Factory functions',
-            'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim',
-            '2025-05-15',
-            'high',
             'javascript',
             false,
         ),
@@ -304,8 +304,9 @@ const toDoListManage = () => {
             // console.log(localStorage.getItem(localStorage.key(i)));
             // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
             let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
-
-            addItemToToDoList(localStorageItem);
+            if (localStorageItem.type === 'toDo') {
+                addItemToToDoList(localStorageItem);
+            }
         }
     };
     // initializeToDoList();
@@ -343,16 +344,16 @@ const toDoListManage = () => {
             toDoItem.hasOwnProperty('category') &&
             toDoItem.hasOwnProperty('completeStatus')
         ) {
-            toDoList.push(
-                createToDo(
-                    toDoItem.title,
-                    toDoItem.detail,
-                    toDoItem.dueDate,
-                    toDoItem.priority,
-                    toDoItem.category,
-                    toDoItem.completeStatus,
-                ),
+            const itemToAdd = createToDo(
+                toDoItem.title,
+                toDoItem.detail,
+                toDoItem.dueDate,
+                toDoItem.priority,
+                toDoItem.category,
+                toDoItem.completeStatus,
             );
+            getToDoList().push(itemToAdd);
+            saveDataToStorage('localStorage', itemToAdd);
         }
     };
 
@@ -366,13 +367,10 @@ const toDoListManage = () => {
         }
         // console.log(index);
         if (index !== -99) {
+            deleteDataByKeyFromStorage('localStorage', getToDoList()[index].id);
             getToDoList().splice(index, 1);
         }
     };
-
-    // initializeToDoList();
-    // console.log(getToDoListByCategory("javascript"));
-    // console.table(getToDoList());
 
     return {
         getToDoList,

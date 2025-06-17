@@ -1,4 +1,4 @@
-import storageAvailable from './localStorageVerify';
+import { storageAvailable, clearStorage, saveDataToStorage, deleteDataByKeyFromStorage } from './localStorageVerify';
 
 const createNote = (title, detail) => {
     const note = {
@@ -55,14 +55,17 @@ const notesListManage = () => {
             // console.log(localStorage.getItem(localStorage.key(i)));
             // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
             let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
-
-            addItemToNotesList(localStorageItem);
+            if (localStorageItem.type === 'note') {
+                addItemToNotesList(localStorageItem);
+            }
         }
     };
 
     const addItemToNotesList = (noteItem) => {
         if (noteItem.type === 'note' && noteItem.hasOwnProperty('title') && noteItem.hasOwnProperty('detail')) {
-            noteList.push(createNote(noteItem.title, noteItem.detail));
+            const itemToAdd = createNote(noteItem.title, noteItem.detail);
+            noteList.push(itemToAdd);
+            saveDataToStorage('localStorage', itemToAdd);
         }
     };
 
@@ -76,6 +79,7 @@ const notesListManage = () => {
         }
         // console.log(index);
         if (index !== -99) {
+            deleteDataByKeyFromStorage('localStorage', getNotesList()[index].id);
             getNotesList().splice(index, 1);
         }
     };

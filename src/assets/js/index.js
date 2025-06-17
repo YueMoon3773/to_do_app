@@ -6,7 +6,8 @@
     - update/get the to do
 3. a module to render to screen
 
-AI: Add modal prj opts addEditModalProjectOption based on the project list.
+AI:done Add modal prj opts addEditModalProjectOption based on the project list.
+AI: un-show todoWrapper/noteWrapper when other are shown
 */
 
 import '../css/styles.css';
@@ -56,10 +57,15 @@ const sideBarAddToDoBtn = document.querySelector('.sideBtnAddItem[data-type="toD
 const sideBarAddProjectBtn = document.querySelector('.sideBtnAddItem[data-type="project"]');
 const sideBarAddNoteBtn = document.querySelector('.sideBtnAddItem[data-type="note"]');
 
-const todoWrapper = document.querySelector('.todoWrapper');
-const notesWrapper = document.querySelector('.notesWrapper');
+export const todoWrapper = document.querySelector('.todoWrapper');
+export const notesWrapper = document.querySelector('.notesWrapper');
 
 const t = sideBarManage();
+
+// sample save localStorage
+// const itemTest = createToDo('TESTTTTTTTTT', 'TEST CONNTENTTT', '2025-06-18', 'high', 'personal', false);
+// localStorage.setItem(`${itemTest.id}`, JSON.stringify(itemTest));
+// localStorage.clear();
 
 const toDo = toDoListManage();
 const notes = notesListManage();
@@ -73,7 +79,7 @@ notes.initializeNotesList();
 // console.log('before: ');
 // console.table(sideBar.getSideBarItemsList());
 sideBar.updateSideBarNumber();
-sideBarListScreenHandler(sideBarList, sideBar);
+sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
 // console.log('added number 1st time: ');
 // console.table(sideBar.getSideBarItemsList());
 
@@ -91,9 +97,8 @@ sideBarListScreenHandler(sideBarList, sideBar);
 
 // ===============
 // TO DO LOGIC
-toDoCardsListScreenRenderer(todoWrapper, toDo, sideBar);
-
-noteCardsListScreenRenderer(notesWrapper, notes);
+// noteCardsListScreenRenderer(todoWrapper, notesWrapper, notes);
+toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, sideBar);
 
 // ==============================
 // change modal states
@@ -187,9 +192,9 @@ modal.addEventListener('click', (e) => {
 });
 
 modalWrapper.addEventListener('click', () => {
-    hideModal(modalWrapper);
+    hideModal(sideBar, modalWrapper);
 });
 
 modalCloseBtn.addEventListener('click', () => {
-    hideModal(modalWrapper);
+    hideModal(sideBar, modalWrapper);
 });

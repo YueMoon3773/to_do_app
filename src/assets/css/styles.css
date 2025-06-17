@@ -227,7 +227,7 @@ body {
 .sideItem {
     width: 100%;
     font-size: 1rem;
-    padding: min(6%, 1em) 0;
+    padding: min(6%, 0.8em) 0;
 
     transition-property: all;
     transition-duration: 600ms;
@@ -279,8 +279,8 @@ body {
 }
 
 .sideProjectList {
-    min-height: 140px;
-    max-height: 260px;
+    min-height: 100px;
+    max-height: 160px;
     font-size: 1rem;
 
     margin-top: min(10px, 1.4em);
@@ -322,7 +322,7 @@ body {
 
 .projectItemNumber {
     font-size: 1.66rem;
-    margin-right: 2em;
+    margin-right: 1.4em;
 }
 
 .sideBtnWrapper {
@@ -379,7 +379,7 @@ body {
     background-color: var(--snow_white_color);
     border-radius: 6px;
 
-    top: -175%;
+    top: -195%;
     left: 70%;
     z-index: 20;
     cursor: pointer;
@@ -390,7 +390,7 @@ body {
 
 .sideBtnAddItem {
     width: 100%;
-    font-size: 1.66rem;
+    font-size: 1.8rem;
     color: var(--black_text);
     font-weight: 500;
     padding: 0.6em 0;
@@ -1260,6 +1260,10 @@ body {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.hiddenIdInp {
+    display: none;
 }
 
 .modalWrapper.show .modal {
