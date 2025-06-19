@@ -244,7 +244,7 @@
         <div class="modalWrapper">
             <div class="modal">
                 <!-- MODAL FORM FOR ADD/EDIT TO-DO; PRJ; NOTE  -->
-                <form action="" data-action="add" class="addEditItemFormModal show">
+                <form action="" data-action="" data-type="" class="addEditItemFormModal show">
                     <h2 class="addEditModalHeading">
                         <span class="addEditModalHeadingAction"> Create a new </span>
                         <span class="addEditModalHeadingType">project</span>
@@ -279,15 +279,13 @@
                                 name="addEditModalDateInp"
                                 id="addEditModalDateInp"
                                 class="addEditModalDateInp"
-                                min="2025-01-01"
-                                max="2099-12-31"
                             />
 
-                            <label for="addEditModalProjectSelect" class="addEditModalProjectLabel">Project</label>
+                            <label for="addEditModalProjectSelectInp" class="addEditModalProjectLabel">Project</label>
                             <select
-                                name="addEditModalProjectSelect"
-                                id="addEditModalProjectSelect"
-                                class="addEditModalProjectSelect"
+                                name="addEditModalProjectSelectInp"
+                                id="addEditModalProjectSelectInp"
+                                class="addEditModalProjectSelectInp"
                             >
                                 <option selected data-value="" class="addEditModalProjectOption">Personal</option>
                                 <option data-value="" class="addEditModalProjectOption">html</option>

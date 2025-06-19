@@ -1,8 +1,15 @@
-import { storageAvailable, clearStorage, saveDataToStorage, deleteDataByKeyFromStorage } from './localStorageVerify';
+import { nanoid } from 'nanoid';
+import {
+    storageAvailable,
+    clearStorage,
+    verifyItemExistInStorage,
+    saveDataToStorage,
+    deleteDataByKeyFromStorage,
+} from './localStorageVerify';
 
-const createToDo = (title, detail, dueDate, priority, category, completeStatus = false) => {
+const createToDo = (title, detail = '', dueDate = '', priority = '', category = '', completeStatus = false) => {
     const toDo = {
-        id: crypto.randomUUID(),
+        id: nanoid(),
         title,
         detail,
         dueDate,
@@ -305,7 +312,7 @@ const toDoListManage = () => {
             // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
             let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
             if (localStorageItem.type === 'toDo') {
-                addItemToToDoList(localStorageItem);
+                addItemToToDoList(false, localStorageItem);
             }
         }
     };
@@ -322,53 +329,91 @@ const toDoListManage = () => {
     };
 
     const getToDoItemById = (toDoList, id) => {
-        const ret = toDoList.getToDoList().find((toDoItem) => {
+        let itemIndex = -99;
+        const item = toDoList.getToDoList().find((toDoItem, index) => {
+            if (toDoItem.id === id) {
+                itemIndex = index;
+            }
             return toDoItem.id === id;
         });
+
+        const ret = {
+            item: item,
+            index: itemIndex,
+        };
         // console.log(ret);
 
         return ret;
+    };
+
+    const updateToDoItemById = (toDoList, id, completeStatus = false, toDoItem) => {
+        const itemIndex = toDoList.getToDoItemById(toDoList, id).index;
+        let completeState;
+        if (completeStatus === 'false') {
+            completeState = false;
+        } else if (completeStatus === 'true') {
+            completeState = true;
+        } else {
+            completeState = completeStatus;
+        }
+
+        toDoList.getToDoList()[itemIndex].title = toDoItem.title;
+        toDoList.getToDoList()[itemIndex].detail = toDoItem.detail;
+        toDoList.getToDoList()[itemIndex].dueDate = toDoItem.dueDate;
+        toDoList.getToDoList()[itemIndex].priority = toDoItem.priority;
+        toDoList.getToDoList()[itemIndex].category = toDoItem.category;
+        toDoList.getToDoList()[itemIndex].completeStatus = completeState;
+
+        if (verifyItemExistInStorage('localStorage', toDoList.getToDoList()[itemIndex].id)) {
+            deleteDataByKeyFromStorage('localStorage', toDoList.getToDoList()[itemIndex].id);
+            saveDataToStorage('localStorage', 'toDo', toDoList.getToDoList()[itemIndex]);
+        }
+        // console.table(toDoList.getToDoList());
     };
 
     const resetToDoList = () => {
         toDoList = [];
     };
 
-    const addItemToToDoList = (toDoItem) => {
+    const addItemToToDoList = (saveItemToStorage = false, toDoItem) => {
+        let itemToAdd;
         if (
-            toDoItem.type === 'to-do' &&
+            toDoItem.type === 'toDo' &&
             toDoItem.hasOwnProperty('title') &&
             toDoItem.hasOwnProperty('detail') &&
             toDoItem.hasOwnProperty('dueDate') &&
             toDoItem.hasOwnProperty('priority') &&
-            toDoItem.hasOwnProperty('category') &&
-            toDoItem.hasOwnProperty('completeStatus')
+            toDoItem.hasOwnProperty('category')
         ) {
-            const itemToAdd = createToDo(
+            itemToAdd = createToDo(
                 toDoItem.title,
                 toDoItem.detail,
                 toDoItem.dueDate,
                 toDoItem.priority,
                 toDoItem.category,
-                toDoItem.completeStatus,
             );
             getToDoList().push(itemToAdd);
-            saveDataToStorage('localStorage', itemToAdd);
         }
+        if (saveItemToStorage) {
+            saveDataToStorage('localStorage', 'toDo', itemToAdd);
+        }
+        // console.log(itemToAdd);
     };
 
-    const deleteToDoItemById = (id) => {
+    const deleteToDoItemById = (deleteItemFromStorage = false, toDoList, id) => {
         let index = -99;
-        for (let i = 0; i < getToDoList().length; i++) {
-            if (getToDoList()[i].id === id) {
+        for (let i = 0; i < toDoList.getToDoList().length; i++) {
+            if (toDoList.getToDoList()[i].id === id) {
                 index = i;
                 break;
             }
         }
         // console.log(index);
         if (index !== -99) {
+            toDoList.getToDoList().splice(index, 1);
+        }
+        if (deleteItemFromStorage) {
             deleteDataByKeyFromStorage('localStorage', getToDoList()[index].id);
-            getToDoList().splice(index, 1);
         }
     };
 
@@ -376,6 +421,7 @@ const toDoListManage = () => {
         getToDoList,
         getToDoListByCategory,
         getToDoItemById,
+        updateToDoItemById,
         resetToDoList,
         deleteToDoItemById,
         initializeToDoList,

@@ -1,5 +1,12 @@
-import { toDoListManage } from './toDo';
-import { notesListManage } from './notes';
+// import { toDoListManage } from './toDo';
+// import { notesListManage } from './notes';
+import {
+    storageAvailable,
+    clearStorage,
+    verifyItemExistInStorage,
+    saveDataToStorage,
+    deleteDataByKeyFromStorage,
+} from './localStorageVerify';
 
 import dateHandler from './datesHandler';
 
@@ -49,13 +56,16 @@ const sideBarManage = (toDo, notes) => {
         return sideBarItemsList;
     };
 
-    const addSideBarProjectChild = (projectTitle) => {
+    const addSideBarProjectChild = (saveItemToStorage = false, projectTitle) => {
         const projectChild = {
             text: projectTitle,
             number: 0,
         };
-
         getSideBarItemsList()[3].child.push(projectChild);
+
+        if (saveItemToStorage) {
+            saveDataToStorage('localStorage', 'sideBar', projectChild);
+        }
     };
 
     const getSideBarProjectItemsList = () => {
@@ -101,6 +111,25 @@ const sideBarManage = (toDo, notes) => {
         return ret;
     };
 
+    const initializeSideBarList = () => {
+        //Check Local storage and add to list if storage is ok
+        if (!storageAvailable('localStorage')) {
+            alert('Failed to add to-do item to storage. Please try again');
+            localStorage.clear();
+            return false;
+        }
+
+        for (let i = 0; i < localStorage.length; i++) {
+            // console.log(localStorage.getItem(localStorage.key(i)));
+            // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
+            let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
+            if (localStorageItem.hasOwnProperty('text') && localStorageItem.hasOwnProperty('number')) {
+                addSideBarProjectChild(false, localStorageItem.text);
+                updateSideBarNumber();
+            }
+        }
+    };
+
     const updateSideBarNumber = () => {
         getSideBarItemsList().forEach((sideBarItem) => {
             if (sideBarItem.text === 'home') {
@@ -121,16 +150,13 @@ const sideBarManage = (toDo, notes) => {
         // console.log(sideBarItemsList);
     };
 
-    // addSideBarProjectChild('test');
-    // updateSideBarNumber();
-    // console.log(getSideBarItemsList());
-
     return {
         getSideBarItemsList,
         addSideBarProjectChild,
         getSideBarProjectItemsList,
         getTodayValue,
         getWeekValue,
+        initializeSideBarList,
         updateSideBarNumber,
     };
 };

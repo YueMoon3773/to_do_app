@@ -1,8 +1,15 @@
-import { storageAvailable, clearStorage, saveDataToStorage, deleteDataByKeyFromStorage } from './localStorageVerify';
+import { nanoid } from 'nanoid';
+import {
+    storageAvailable,
+    clearStorage,
+    verifyItemExistInStorage,
+    saveDataToStorage,
+    deleteDataByKeyFromStorage,
+} from './localStorageVerify';
 
 const createNote = (title, detail) => {
     const note = {
-        id: crypto.randomUUID(),
+        id: nanoid(),
         title,
         detail,
         type: 'note',
@@ -56,31 +63,39 @@ const notesListManage = () => {
             // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
             let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
             if (localStorageItem.type === 'note') {
-                addItemToNotesList(localStorageItem);
+                addItemToNotesList(false, localStorageItem);
             }
         }
     };
 
-    const addItemToNotesList = (noteItem) => {
+    const addItemToNotesList = (saveItemToStorage = false, noteItem) => {
+        let itemToAdd;
         if (noteItem.type === 'note' && noteItem.hasOwnProperty('title') && noteItem.hasOwnProperty('detail')) {
-            const itemToAdd = createNote(noteItem.title, noteItem.detail);
+            itemToAdd = createNote(noteItem.title, noteItem.detail);
+            // console.log(itemToAdd);
+
             noteList.push(itemToAdd);
-            saveDataToStorage('localStorage', itemToAdd);
         }
+        if (saveItemToStorage) {
+            saveDataToStorage('localStorage', 'note', itemToAdd);
+        }
+        // console.log(itemToAdd);
     };
 
-    const deleteNoteItemById = (id) => {
+    const deleteNoteItemById = (deleteItemFromStorage = false, noteList, id) => {
         let index = -99;
-        for (let i = 0; i < getNotesList().length; i++) {
-            if (getNotesList()[i].id === id) {
+        for (let i = 0; i < noteList.getNotesList().length; i++) {
+            if (noteList.getNotesList()[i].id === id) {
                 index = i;
                 break;
             }
         }
         // console.log(index);
         if (index !== -99) {
+            noteList.getNotesList().splice(index, 1);
+        }
+        if (deleteItemFromStorage) {
             deleteDataByKeyFromStorage('localStorage', getNotesList()[index].id);
-            getNotesList().splice(index, 1);
         }
     };
 

@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import SVGIconTemplate from './svgIconTemplate';
 
 import {
+    sideBarList,
     todoWrapper,
     notesWrapper,
     modalWrapper,
@@ -23,7 +24,7 @@ import {
     addEditModalBtnAction,
     addEditModalBtnType,
     addEditModalDateInp,
-    addEditModalProjectSelect,
+    addEditModalProjectSelectInp,
     modalPriorityBtnLow,
     modalPriorityBtnMedium,
     modalPriorityBtnHigh,
@@ -196,11 +197,14 @@ const toDoCardStatesHandler = (toDoCompleteStatus, toDoPriority) => {
 const formModalBaseTextContentHandler = (
     action,
     type,
+    formModal,
     formHeadingAction,
     formHeadingType,
     formFooterBtnAction,
     formFooterBtnType,
 ) => {
+    formModal.dataset.action = action;
+    formModal.dataset.type = type;
     getModalStates().forEach((modalState) => {
         if (modalState.action === action && modalState.type === type) {
             formHeadingAction.innerText = modalState.formModalHeadingActionText;
@@ -219,7 +223,7 @@ const formModalMainTextContentHandler = (
     addEditModalTitleInp,
     addEditModalDetailInp,
     addEditModalDateInp,
-    addEditModalProjectSelect,
+    addEditModalProjectSelectInp,
     modalPriorityBtnLow,
     modalPriorityBtnMedium,
     modalPriorityBtnHigh,
@@ -230,7 +234,7 @@ const formModalMainTextContentHandler = (
         addEditModalTitleInp,
         addEditModalDetailInp,
         addEditModalDateInp,
-        addEditModalProjectSelect,
+        addEditModalProjectSelectInp,
         modalPriorityBtnLow,
         modalPriorityBtnMedium,
         modalPriorityBtnHigh,
@@ -240,8 +244,8 @@ const formModalMainTextContentHandler = (
     addEditModalDetailInp.value = toDoItem.detail;
     addEditModalDateInp.value = toDoItem.dueDate;
 
-    // addEditModalProjectSelect
-    formModalProjectCategoryLoader(sideBar, toDoItem.category, addEditModalProjectSelect);
+    // addEditModalProjectSelectInp
+    formModalProjectCategoryLoader(sideBar, toDoItem.category, addEditModalProjectSelectInp);
 
     switch (toDoItem.priority) {
         case 'low':
@@ -263,12 +267,20 @@ const formModalMainTextContentHandler = (
         DOMhiddenIdInp.classList.add('hiddenIdInp');
         DOMhiddenIdInp.value = toDoItem.id;
         DOMhiddenIdInp.name = 'hiddenIdInp';
+
+        const DOMhiddenCompleteStatusInp = document.createElement('input');
+        DOMhiddenCompleteStatusInp.type = 'hidden';
+        DOMhiddenCompleteStatusInp.classList.add('hiddenCompleteStatusInp');
+        DOMhiddenCompleteStatusInp.value = toDoItem.completeStatus;
+        DOMhiddenCompleteStatusInp.name = 'hiddenCompleteStatusInp';
+
         addEditItemFormModal.appendChild(DOMhiddenIdInp);
+        addEditItemFormModal.appendChild(DOMhiddenCompleteStatusInp);
     }
 };
 
-const formModalProjectCategoryLoader = (sideBarProjectsList, toDoCategory = '', addEditModalProjectSelect) => {
-    addEditModalProjectSelect.innerHTML = '';
+const formModalProjectCategoryLoader = (sideBarProjectsList, toDoCategory = '', addEditModalProjectSelectInp) => {
+    addEditModalProjectSelectInp.innerHTML = '';
     const projectCategoryList = sideBarProjectsList.getSideBarProjectItemsList();
 
     for (let i = 0; i < projectCategoryList.length; i++) {
@@ -280,7 +292,7 @@ const formModalProjectCategoryLoader = (sideBarProjectsList, toDoCategory = '', 
         if (projectCategoryList[i] === toDoCategory) {
             DOMaddEditModalProjectOption.setAttribute('selected', 'true');
         }
-        addEditModalProjectSelect.appendChild(DOMaddEditModalProjectOption);
+        addEditModalProjectSelectInp.appendChild(DOMaddEditModalProjectOption);
     }
 };
 
@@ -290,7 +302,7 @@ const resetFormModalMainTextContent = (
     addEditModalTitleInp,
     addEditModalDetailInp,
     addEditModalDateInp,
-    addEditModalProjectSelect,
+    addEditModalProjectSelectInp,
     modalPriorityBtnLow,
     modalPriorityBtnMedium,
     modalPriorityBtnHigh,
@@ -299,7 +311,7 @@ const resetFormModalMainTextContent = (
     addEditModalDetailInp.value = '';
     addEditModalDateInp.value = '';
 
-    addEditModalProjectSelect.innerHTML = '';
+    addEditModalProjectSelectInp.innerHTML = '';
     const projectCategoryList = sideBarProjectsList.getSideBarProjectItemsList();
 
     for (let i = 0; i < projectCategoryList.length; i++) {
@@ -311,7 +323,7 @@ const resetFormModalMainTextContent = (
         if (i === 0) {
             DOMaddEditModalProjectOption.setAttribute('selected', 'true');
         }
-        addEditModalProjectSelect.appendChild(DOMaddEditModalProjectOption);
+        addEditModalProjectSelectInp.appendChild(DOMaddEditModalProjectOption);
     }
 
     if (
@@ -324,12 +336,16 @@ const resetFormModalMainTextContent = (
         modalPriorityBtnHigh.classList.remove('active');
     }
 
-    // Check if there is hidden form Id inp
-    // This inp are used for storing ID when editing card information
+    // Check if there is hidden form Id + complete status inp
+    // This inp are used for storing ID + complete status when editing card information
     // if yes delete it from DOM
     const DOMhiddenIdInp = document.querySelector('.addEditItemFormModal .hiddenIdInp');
+    const DOMhiddenCompleteStatusInp = document.querySelector('.addEditItemFormModal .hiddenCompleteStatusInp');
     if (DOMhiddenIdInp) {
         addEditItemFormModal.removeChild(DOMhiddenIdInp);
+    }
+    if (DOMhiddenCompleteStatusInp) {
+        addEditItemFormModal.removeChild(DOMhiddenCompleteStatusInp);
     }
 };
 
@@ -366,12 +382,13 @@ const sideBarItemClickHandler = (sideBarClickType = 'personal', toDo, notes, sid
     } else {
         toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, sideBar, sideBarClickType);
     }
+    sideBarListScreenHandler(sideBarList, toDo, notes, sideBar, sideBarClickType);
 };
 
 const toDoCheckBoxBtnHandler = (toDoList, id) => {};
 
 const toDoDetailBtnHandler = (action, toDoList, id) => {
-    const toDoCardDetails = toDoList.getToDoItemById(toDoList, id);
+    const toDoCardDetails = toDoList.getToDoItemById(toDoList, id).item;
     // console.log(toDoCardDetails);
 
     if (toDoCardDetails === undefined) {
@@ -394,7 +411,7 @@ const toDoDetailBtnHandler = (action, toDoList, id) => {
 };
 
 const toDoEditBtnHandler = (action, toDoList, sideBar, id) => {
-    const toDoCardDetails = toDoList.getToDoItemById(toDoList, id);
+    const toDoCardDetails = toDoList.getToDoItemById(toDoList, id).item;
     // console.log(toDoCardDetails);
 
     if (toDoCardDetails === undefined) {
@@ -404,6 +421,7 @@ const toDoEditBtnHandler = (action, toDoList, sideBar, id) => {
         formModalBaseTextContentHandler(
             action,
             toDoCardDetails.type,
+            addEditItemFormModal,
             addEditModalHeadingAction,
             addEditModalHeadingType,
             addEditModalBtnAction,
@@ -417,7 +435,7 @@ const toDoEditBtnHandler = (action, toDoList, sideBar, id) => {
             addEditModalTitleInp,
             addEditModalDetailInp,
             addEditModalDateInp,
-            addEditModalProjectSelect,
+            addEditModalProjectSelectInp,
             modalPriorityBtnLow,
             modalPriorityBtnMedium,
             modalPriorityBtnHigh,
@@ -453,7 +471,7 @@ const hideModal = (sideBar, modalWrapper) => {
             addEditModalTitleInp,
             addEditModalDetailInp,
             addEditModalDateInp,
-            addEditModalProjectSelect,
+            addEditModalProjectSelectInp,
             modalPriorityBtnLow,
             modalPriorityBtnMedium,
             modalPriorityBtnHigh,
@@ -465,6 +483,7 @@ const hideModal = (sideBar, modalWrapper) => {
 // RENDER TO SCREEN FUNCTIONS AND THEIR RELATED LOGICAL FUNCTIONS
 const sideBarListScreenHandler = (DOMsideBar, toDo, notes, sideBar, sideBarActiveCategory = 'home') => {
     DOMsideBar.innerHTML = '';
+    sideBar.updateSideBarNumber();
     sideBar.getSideBarItemsList().forEach((sideBarItem) => {
         const DOMsideItem = document.createElement('li');
         DOMsideItem.classList.add('sideItem');
@@ -593,7 +612,11 @@ const toDoCardRenderer = (
 
     const DOMtCardDate = document.createElement('span');
     DOMtCardDate.classList.add('tCardDate');
-    DOMtCardDate.innerText = format(toDoCardDueDate, 'iii - MMM do yyy');
+    if (toDoCardDueDate === '') {
+        DOMtCardDate.innerText = 'No Due-date';
+    } else {
+        DOMtCardDate.innerText = format(toDoCardDueDate, 'iii - MMM do yyy');
+    }
     const DOMtCardEditWrapper = document.createElement('div');
     DOMtCardEditWrapper.classList.add('tCardEditWrapper');
     DOMtCardEditWrapper.dataset.id = `${toDoCardId}`;

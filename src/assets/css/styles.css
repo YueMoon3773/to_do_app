@@ -375,12 +375,12 @@ body {
     position: absolute;
     width: max-content;
     font-size: 1rem;
-    padding: 0.8em 1.6em;
+    padding: 0.8em 2.4em;
     background-color: var(--snow_white_color);
     border-radius: 6px;
 
-    top: -195%;
-    left: 70%;
+    top: -200%;
+    left: 50%;
     z-index: 20;
     cursor: pointer;
     box-shadow: var(--card_secondary_box_shadow);
@@ -390,7 +390,7 @@ body {
 
 .sideBtnAddItem {
     width: 100%;
-    font-size: 1.8rem;
+    font-size: 1.86rem;
     color: var(--black_text);
     font-weight: 500;
     padding: 0.6em 0;
@@ -934,7 +934,7 @@ body {
 .addEditModalDetailInp,
 .addEditModalDateInp,
 .addEditModalProjectLabel,
-.addEditModalProjectSelect,
+.addEditModalProjectSelectInp,
 .addEditModalProjectOption,
 .addEditModalDateLabel,
 .addEditModalPriorityLabel {
@@ -1045,7 +1045,7 @@ body {
     place-self: center start;
 }
 
-.addEditModalProjectSelect {
+.addEditModalProjectSelectInp {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
 
@@ -1262,7 +1262,8 @@ body {
     overflow: hidden;
 }
 
-.hiddenIdInp {
+.hiddenIdInp,
+.hiddenCompleteStatusInp {
     display: none;
 }
 
