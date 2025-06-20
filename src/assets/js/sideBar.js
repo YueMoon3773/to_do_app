@@ -120,8 +120,6 @@ const sideBarManage = (toDo, notes) => {
         }
 
         for (let i = 0; i < localStorage.length; i++) {
-            // console.log(localStorage.getItem(localStorage.key(i)));
-            // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
             let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
             if (localStorageItem.hasOwnProperty('text') && localStorageItem.hasOwnProperty('number')) {
                 addSideBarProjectChild(false, localStorageItem.text);

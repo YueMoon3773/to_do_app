@@ -24,8 +24,10 @@ const clearStorage = (type) => {
 
 const verifyItemExistInStorage = (type, itemKey) => {
     let storage = window[type];
+    let key;
+    key = typeof itemKey === 'string' ? (key = itemKey) : (key = JSON.stringify(itemKey));
 
-    if (storage.getItem(JSON.stringify(itemKey)) !== null) {
+    if (storage.getItem(key) !== null) {
         return true;
     } else {
         return false;
@@ -46,9 +48,13 @@ const saveDataToStorage = (type, dataType = 'toDo', objData) => {
     }
 };
 
-const deleteDataByKeyFromStorage = (type, objDataKey) => {
+const deleteDataByKeyFromStorage = (type, itemKey) => {
     let storage = window[type];
-    storage.removeItem(JSON.stringify(objDataKey));
+    if (typeof itemKey === 'string') {
+        storage.removeItem(itemKey);
+    } else {
+        storage.removeItem(JSON.stringify(itemKey));
+    }
 };
 
 export { storageAvailable, clearStorage, verifyItemExistInStorage, saveDataToStorage, deleteDataByKeyFromStorage };

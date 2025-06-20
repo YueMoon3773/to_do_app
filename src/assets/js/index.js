@@ -81,31 +81,9 @@ sideBar.initializeSideBarList();
 // localStorage.clear();
 // window.localStorage.clear();
 
-// console.table(toDo.getToDoList());
-// SIDE BAR LOGIC
-// console.log('before: ');
-// console.table(sideBar.getSideBarItemsList());
-// sideBar.updateSideBarNumber();
 sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
-// console.log('added number 1st time: ');
-// console.table(sideBar.getSideBarItemsList());
 
-// const itemToAdd = createToDo('Add sample item', 'sample item to do', '2025-06-12', 'low', 'personal', false);
-// sideBarListScreenHandler(sideBarList, sideBar);
-// toDo.addItemToToDoList(itemToAdd);
-
-// console.log('list category:');
-// toDo.getToDoListByCategory('personal');
-
-// sideBar.updateSideBarNumber();
-// sideBarListScreenHandler(sideBarList, sideBar);
-// console.log('added item + update number: ');
-// console.table(sideBar.getSideBarItemsList());
-
-// ===============
-// TO DO LOGIC
-// noteCardsListScreenRenderer(todoWrapper, notesWrapper, notes);
-toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, sideBar);
+toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
 
 // ===============================
 
@@ -206,7 +184,7 @@ addEditModalBtn.addEventListener('click', () => {
         if (formAction === 'add' && formType === 'toDo') {
             formHandler.addToDoHandler();
             sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
-            toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, sideBar);
+            toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
             hideModal(sideBar, modalWrapper);
         } else if (formAction === 'add' && formType === 'project') {
             formHandler.addProjectHandler();
@@ -219,7 +197,7 @@ addEditModalBtn.addEventListener('click', () => {
         } else if (formAction === 'edit' && formType === 'toDo') {
             formHandler.editToDoHandler();
             sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
-            toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, sideBar);
+            toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
             hideModal(sideBar, modalWrapper);
         }
     }

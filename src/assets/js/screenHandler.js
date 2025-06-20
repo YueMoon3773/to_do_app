@@ -349,6 +349,44 @@ const resetFormModalMainTextContent = (
     }
 };
 
+const swapToDoCheckBoxIcon = (completeStatus) => {
+    const tCardCheckBoxBlank = document.querySelector('.tCardCheckBoxWrapper .tCardCheckBoxBlank');
+    const tCardCheckBoxChecked = document.querySelector('.tCardCheckBoxWrapper .tCardCheckBoxChecked');
+
+    if (!tCardCheckBoxBlank && !tCardCheckBox) {
+        return;
+    }
+
+    if (completeStatus) {
+        tCardCheckBoxBlank.classList.remove('show');
+        tCardCheckBoxChecked.classList.add('show');
+    } else {
+        tCardCheckBoxChecked.classList.remove('show');
+        tCardCheckBoxBlank.classList.add('show');
+    }
+};
+
+const toDoCheckBoxBtnHandler = (toDo, notes, sideBar, id) => {
+    const completeState = !toDo.getToDoItemById(toDo, id).completeStatus;
+    swapToDoCheckBoxIcon(completeState);
+
+    toDo.updateToDoCompleteStatusById(toDo, id, completeState);
+    toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
+};
+
+const toDoDeleteBtnHandler = (toDo, notes, sideBar, id) => {
+    toDo.deleteToDoItemById(true, toDo, id);
+    toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
+    sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
+};
+
+const noteCardDeleteBtnHandler = (toDo, notes, sideBar, id) => {
+
+    notes.deleteNoteItemById(true, notes, id);
+    noteCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
+    sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
+};
+
 const detailsModalContextHandler = (toDoItem, detailModalHeading, detailModalContentWrapper) => {
     detailModalHeading.innerText = toDoItem.title;
     detailModalContentWrapper.innerHTML = '';
@@ -378,24 +416,21 @@ const detailsModalContextHandler = (toDoItem, detailModalHeading, detailModalCon
 
 const sideBarItemClickHandler = (sideBarClickType = 'personal', toDo, notes, sideBar) => {
     if (sideBarClickType === 'notes') {
-        noteCardsListScreenRenderer(todoWrapper, notesWrapper, notes);
+        noteCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
     } else {
-        toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, sideBar, sideBarClickType);
+        toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar, sideBarClickType);
     }
     sideBarListScreenHandler(sideBarList, toDo, notes, sideBar, sideBarClickType);
 };
 
-const toDoCheckBoxBtnHandler = (toDoList, id) => {};
-
-const toDoDetailBtnHandler = (action, toDoList, id) => {
-    const toDoCardDetails = toDoList.getToDoItemById(toDoList, id).item;
+const toDoDetailBtnHandler = (action, toDo, id) => {
+    const toDoCardDetails = toDo.getToDoItemById(toDo, id).item;
     // console.log(toDoCardDetails);
 
     if (toDoCardDetails === undefined) {
         alert('Cannot view details of this To Do right now. Please try again later');
         return;
     } else {
-        // console.log(toDoCardDetails);
         detailsModalContextHandler(toDoCardDetails, detailModalHeading, detailModalContentWrapper);
         modalPartsDisplayStatesHandler(
             action,
@@ -410,8 +445,8 @@ const toDoDetailBtnHandler = (action, toDoList, id) => {
     }
 };
 
-const toDoEditBtnHandler = (action, toDoList, sideBar, id) => {
-    const toDoCardDetails = toDoList.getToDoItemById(toDoList, id).item;
+const toDoEditBtnHandler = (action, toDo, sideBar, id) => {
+    const toDoCardDetails = toDo.getToDoItemById(toDo, id).item;
     // console.log(toDoCardDetails);
 
     if (toDoCardDetails === undefined) {
@@ -452,10 +487,6 @@ const toDoEditBtnHandler = (action, toDoList, sideBar, id) => {
         showModal(modalWrapper);
     }
 };
-
-const toDoDeleteBtnHandler = (toDoList, id) => {};
-
-const noteCardDeleteBtnHandler = () => {};
 
 const showModal = (modalWrapper) => {
     if (!modalWrapper.classList.contains('show')) {
@@ -551,7 +582,8 @@ const sideBarListScreenHandler = (DOMsideBar, toDo, notes, sideBar, sideBarActiv
 
 const toDoCardRenderer = (
     parentElement,
-    toDoList,
+    toDo,
+    notes,
     sideBar,
     toDoCardId,
     todoCardPriority,
@@ -586,8 +618,8 @@ const toDoCardRenderer = (
     const DOMtCardCheckBoxWrapper = document.createElement('div');
     DOMtCardCheckBoxWrapper.classList.add('tCardCheckBoxWrapper');
     DOMtCardCheckBoxWrapper.dataset.id = `${toDoCardId}`;
-    DOMtCardCheckBoxWrapper.addEventListener('click', () => {
-        toDoCheckBoxBtnHandler();
+    DOMtCardCheckBoxWrapper.addEventListener('click', function () {
+        toDoCheckBoxBtnHandler(toDo, notes, sideBar, this.dataset.id);
     });
     const DOMtCardCheckBoxBlank = SVGIconTemplate().tCardCheckBoxBlank(tCardCheckBoxBlankState);
     const DOMtCardCheckBoxChecked = SVGIconTemplate().tCardCheckBoxChecked(tCardCheckBoxCheckedState);
@@ -603,7 +635,7 @@ const toDoCardRenderer = (
     DOMtCardDetailsWrapper.dataset.id = `${toDoCardId}`;
     DOMtCardDetailsWrapper.dataset.action = 'detail';
     DOMtCardDetailsWrapper.addEventListener('click', function () {
-        toDoDetailBtnHandler(this.dataset.action, toDoList, this.dataset.id);
+        toDoDetailBtnHandler(this.dataset.action, toDo, this.dataset.id);
     });
     const DOMtCardDetailsIcon = SVGIconTemplate().tCardDetailsIcon();
     const DOMtCardDetailsText = document.createElement('span');
@@ -622,7 +654,7 @@ const toDoCardRenderer = (
     DOMtCardEditWrapper.dataset.id = `${toDoCardId}`;
     DOMtCardEditWrapper.dataset.action = 'edit';
     DOMtCardEditWrapper.addEventListener('click', function () {
-        toDoEditBtnHandler(this.dataset.action, toDoList, sideBar, this.dataset.id);
+        toDoEditBtnHandler(this.dataset.action, toDo, sideBar, this.dataset.id);
     });
     const DOMtCardEditIcon = SVGIconTemplate().tCardEditIcon();
 
@@ -630,7 +662,7 @@ const toDoCardRenderer = (
     DOMtCardDeleteWrapper.classList.add('tCardDeleteWrapper');
     DOMtCardDeleteWrapper.dataset.id = `${toDoCardId}`;
     DOMtCardDeleteWrapper.addEventListener('click', function () {
-        toDoDeleteBtnHandler(toDoList, this.dataset.id);
+        toDoDeleteBtnHandler(toDo, notes, sideBar, this.dataset.id);
     });
     const DOMtCardDeleteIconBlank = SVGIconTemplate().tCardDeleteIconBlank();
     const DOMtCardDeleteIconFull = SVGIconTemplate().tCardDeleteIconFull();
@@ -660,10 +692,10 @@ const toDoCardRenderer = (
 const toDoCardsListScreenRenderer = (
     DOMtodoWrapper,
     DOMnotesWrapper,
-    toDoList,
+    toDo,
+    notes,
     sideBar,
     renderCategoryType = 'home',
-    renderCardFunction,
 ) => {
     if (DOMnotesWrapper.classList.contains('show')) {
         DOMnotesWrapper.classList.remove('show');
@@ -674,11 +706,11 @@ const toDoCardsListScreenRenderer = (
     const sideBarProjectItemsList = sideBar.getSideBarProjectItemsList();
 
     if (renderCategoryType.toLowerCase() === 'home' || renderCategoryType.toLowerCase() === 'project') {
-        // console.log(toDoList);
-        toDoList.getToDoList().forEach((toDoItem) => {
+        toDo.getToDoList().forEach((toDoItem) => {
             toDoCardRenderer(
                 DOMtodoWrapper,
-                toDoList,
+                toDo,
+                notes,
                 sideBar,
                 toDoItem.id,
                 toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
@@ -693,7 +725,8 @@ const toDoCardsListScreenRenderer = (
         sideBar.getTodayValue().list.forEach((toDoItem) => {
             toDoCardRenderer(
                 DOMtodoWrapper,
-                toDoList,
+                toDo,
+                notes,
                 sideBar,
                 toDoItem.id,
                 toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
@@ -708,7 +741,8 @@ const toDoCardsListScreenRenderer = (
         sideBar.getWeekValue().list.forEach((toDoItem) => {
             toDoCardRenderer(
                 DOMtodoWrapper,
-                toDoList,
+                toDo,
+                notes,
                 sideBar,
                 toDoItem.id,
                 toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
@@ -723,11 +757,11 @@ const toDoCardsListScreenRenderer = (
 
     if (sideBarProjectItemsList.includes(renderCategoryType.toLowerCase())) {
         // console.log(toDoList.getToDoListByCategory(renderCategoryType.toLowerCase()));
-
-        toDoList.getToDoListByCategory(renderCategoryType.toLowerCase()).forEach((toDoItem) => {
+        toDo.getToDoListByCategory(renderCategoryType.toLowerCase()).forEach((toDoItem) => {
             toDoCardRenderer(
                 DOMtodoWrapper,
-                toDoList,
+                toDo,
+                notes,
                 sideBar,
                 toDoItem.id,
                 toDoCardStatesHandler(toDoItem.completeStatus, toDoItem.priority).DOMtodoCardPriority,
@@ -741,7 +775,7 @@ const toDoCardsListScreenRenderer = (
     }
 };
 
-const noteCardRenderer = (parentElement, noteCardId, noteCardTittle, noteCardDetail) => {
+const noteCardRenderer = (parentElement, toDo, notes, sideBar, noteCardId, noteCardTittle, noteCardDetail) => {
     const DOMnoteCard = document.createElement('div');
     DOMnoteCard.classList.add('noteCard');
     DOMnoteCard.dataset.id = `${noteCardId}`;
@@ -754,9 +788,10 @@ const noteCardRenderer = (parentElement, noteCardId, noteCardTittle, noteCardDet
 
     const DOMnoteCardCloseBtnWrapper = document.createElement('div');
     DOMnoteCardCloseBtnWrapper.classList.add('noteCardCloseBtnWrapper');
+    DOMnoteCardCloseBtnWrapper.dataset.id = `${noteCardId}`;
     const DOMnoteCloseBtnIcon = SVGIconTemplate().noteCloseBtnIcon();
-    DOMnoteCardCloseBtnWrapper.addEventListener('click', () => {
-        noteCardDeleteBtnHandler();
+    DOMnoteCardCloseBtnWrapper.addEventListener('click', function () {
+        noteCardDeleteBtnHandler(toDo, notes, sideBar, this.dataset.id);
     });
 
     const DOMnoteCardContentWrapper = document.createElement('div');
@@ -777,14 +812,14 @@ const noteCardRenderer = (parentElement, noteCardId, noteCardTittle, noteCardDet
     parentElement.appendChild(DOMnoteCard);
 };
 
-const noteCardsListScreenRenderer = (DOMtodoWrapper, DOMnotesWrapper, notesList) => {
+const noteCardsListScreenRenderer = (DOMtodoWrapper, DOMnotesWrapper, toDo, notes, sideBar) => {
     if (DOMtodoWrapper.classList.contains('show')) {
         DOMtodoWrapper.classList.remove('show');
     }
     DOMnotesWrapper.classList.add('show');
     DOMnotesWrapper.innerHTML = '';
-    notesList.getNotesList().forEach((noteItem) => {
-        noteCardRenderer(DOMnotesWrapper, noteItem.id, noteItem.title, noteItem.detail);
+    notes.getNotesList().forEach((noteItem) => {
+        noteCardRenderer(DOMnotesWrapper, toDo, notes, sideBar, noteItem.id, noteItem.title, noteItem.detail);
     });
 };
 

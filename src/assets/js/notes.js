@@ -59,11 +59,9 @@ const notesListManage = () => {
         }
 
         for (let i = 0; i < localStorage.length; i++) {
-            // console.log(localStorage.getItem(localStorage.key(i)));
-            // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
             let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
             if (localStorageItem.type === 'note') {
-                addItemToNotesList(false, localStorageItem);
+                noteList.push(localStorageItem);
             }
         }
     };
@@ -79,7 +77,6 @@ const notesListManage = () => {
         if (saveItemToStorage) {
             saveDataToStorage('localStorage', 'note', itemToAdd);
         }
-        // console.log(itemToAdd);
     };
 
     const deleteNoteItemById = (deleteItemFromStorage = false, noteList, id) => {
@@ -91,11 +88,15 @@ const notesListManage = () => {
             }
         }
         // console.log(index);
+
         if (index !== -99) {
             noteList.getNotesList().splice(index, 1);
-        }
-        if (deleteItemFromStorage) {
-            deleteDataByKeyFromStorage('localStorage', getNotesList()[index].id);
+
+            if (deleteItemFromStorage) {
+                if (verifyItemExistInStorage('localStorage', id)) {
+                    deleteDataByKeyFromStorage('localStorage', id);
+                }
+            }
         }
     };
 
