@@ -30,6 +30,7 @@ import {
 export const modalWrapper = document.querySelector('.modalWrapper');
 const modal = document.querySelector('.modal');
 
+const menuWrapper = document.querySelector('.menuWrapper');
 export const addEditItemFormModal = document.querySelector('.addEditItemFormModal');
 export const addEditModalHeadingAction = document.querySelector('.addEditModalHeadingAction');
 export const addEditModalHeadingType = document.querySelector('.addEditModalHeadingType');
@@ -61,6 +62,10 @@ const sideBarAddNoteBtn = document.querySelector('.sideBtnAddItem[data-type="not
 export const todoWrapper = document.querySelector('.todoWrapper');
 export const notesWrapper = document.querySelector('.notesWrapper');
 
+const sideBarDom = document.querySelector('.sideBar');
+const sideBtnWrapperDom = document.querySelector('.sideBtnWrapper');
+const sideBtnAddListDom = document.querySelector('.sideBtnAddList');
+
 const t = sideBarManage();
 
 // sample save localStorage
@@ -72,7 +77,13 @@ const toDo = toDoListManage();
 const notes = notesListManage();
 const sideBar = sideBarManage(toDo, notes);
 
-toDo.initializeToDoList();
+try {
+    toDo.initializeToDoList();
+} catch (err) {
+    console.error('initializeToDoList failed, clearing corrupted storage:', err);
+    localStorage.clear();
+    toDo.initializeToDoList();
+}
 notes.initializeNotesList();
 sideBar.initializeSideBarList();
 
@@ -86,6 +97,38 @@ sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);
 toDoCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
 
 // ===============================
+
+menuWrapper.addEventListener('click', () => {
+    if (menuWrapper.classList.contains('open')) {
+        menuWrapper.classList.remove('open');
+        menuWrapper.classList.add('close');
+    } else if (menuWrapper.classList.contains('close')) {
+        menuWrapper.classList.remove('close');
+        menuWrapper.classList.add('open');
+    }
+
+    if (sideBarDom.classList.contains('hide')) {
+        sideBarDom.classList.remove('hide');
+        sideBarDom.classList.add('show');
+    } else if (sideBarDom.classList.contains('show')) {
+        sideBarDom.classList.remove('show');
+        sideBarDom.classList.add('hide');
+    }
+});
+
+sideBtnWrapperDom.addEventListener('click', () => {
+    if (!sideBtnAddListDom.classList.contains('show')) {
+        sideBtnAddListDom.classList.add('show');
+    } else {
+        sideBtnAddListDom.classList.remove('show');
+    }
+
+    setTimeout(() => {
+        if (sideBtnAddListDom.classList.contains('show')) {
+            sideBtnAddListDom.classList.remove('show');
+        }
+    }, 5000);
+});
 
 addEditItemFormModal.addEventListener('submit', (e) => {
     e.preventDefault();

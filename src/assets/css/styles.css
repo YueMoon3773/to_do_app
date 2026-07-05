@@ -52,6 +52,31 @@
     --detail_modal_min_width: 600px;
     --detail_modal_max_width: 900px;
 
+    --fs_heading_xxl: clamp(4.6rem, 3.6vw + 4.8rem, 5.6rem);
+    --fs_heading_xl: clamp(4rem, 3vw + 4rem, 4.6rem);
+    --fs_heading_lg: clamp(3.6rem, 2.6vw + 3.6rem, 4rem);
+    --fs_heading_md: clamp(3.2rem, 1.86vw + 3.2rem, 3.6rem);
+    --fs_heading_sm: clamp(3rem, 1.66vw + 3rem, 3.2rem);
+    --fs_heading_ssm: clamp(2.66rem, 1.6vw + 2.8rem, 3rem);
+    --fs_heading_3sm: clamp(2.6rem, 1.4vw + 2.6rem, 2.66rem);
+
+    --fs_normal_xl: clamp(2.26rem, 1.2vw + 2.2rem, 2.46rem);
+    --fs_normal_lg: clamp(1.76rem, 0.8vw + 1.8rem, 2.26rem);
+    --fs_normal_md: clamp(1.66rem, 0.6vw + 1.66rem, 1.76rem);
+    --fs_normal_sm: clamp(1.56rem, 0.46vw + 1.6rem, 1.66rem);
+    --fs_normal_ssm: clamp(1.36rem, 0.3vw + 1.4rem, 1.56rem);
+    --fs_normal_3sm: clamp(1rem, 0.3vw + 1.2rem, 1.36rem);
+    --fs_normal_4sm: clamp(0.66rem, 0.2vw + 0.86rem, 1rem);
+
+    --distance_3xl: 48px;
+    --distance_xxl: 40px;
+    --distance_xl: 32px;
+    --distance_lg: 24px;
+    --distance_md: 16px;
+    --distance_sm: 8px;
+    --distance_ssm: 6px;
+    --distance_3sm: 4px;
+
     --main_radial_color: radial-gradient(
         circle,
         rgba(224, 216, 47, 1) 30%,
@@ -61,6 +86,9 @@
 
     --card_primary_box_shadow: 0.4em 0.4em 0.8em 0.1em rgba(0, 0, 0, 0.36);
     --card_secondary_box_shadow: 0.26em 0.26em 0.36em 0.1em rgba(0, 0, 0, 0.26);
+
+    --scroll_bar_width: 8px;
+    --scroll_bar_border_radius: 16px;
 }
 
 a {
@@ -79,6 +107,33 @@ svg {
 
 ul {
     list-style: none;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* SCROLLBAR SET UP */
+::-webkit-scrollbar {
+    width: var(--scroll_bar_width);
+    height: var(--scroll_bar_width);
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.36);
+    -webkit-border-radius: var(--scroll_bar_border_radius);
+    border-radius: var(--scroll_bar_border_radius);
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: var(--scroll_bar_border_radius);
+    border-radius: var(--scroll_bar_border_radius);
+    background: var(--primary_color);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.36);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+    background: var(--primary_color);
 }
 
 @keyframes appear {
@@ -162,22 +217,35 @@ body {
     top: 0;
 
     height: 100%;
-    display: flex;
     align-items: center;
+    cursor: pointer;
+    display: none;
 }
 
-.menuIcon {
+.menuWrapper.open .menuCloseIcon {
+    display: none;
+}
+
+.menuWrapper.close .menuOpenIcon {
+    display: none;
+}
+
+.menuOpenIcon,
+.menuCloseIcon {
     font-size: 1rem;
+    height: var(--fs_heading_lg);
+    aspect-ratio: 1 / 1;
     padding: 0.4em;
-    border: 2px solid var(--black_color);
+    border: 2px solid var(--white_color);
     border-radius: 8px;
+    color: var(--white_text);
 
     transition-property: all;
     transition-duration: 460ms;
     transition-timing-function: ease;
 }
 
-.menuIcon:hover {
+.menuOpenIcon:hover {
     transform: scale(1.06);
 }
 
@@ -207,9 +275,22 @@ body {
 /* =============================================== */
 /* SIDEBAR SETUP  */
 /* =============================================== */
+
+.main {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+    position: relative;
+}
+
+/* =============================================== */
+/* SIDEBAR SETUP  */
+/* =============================================== */
 .sideBar {
     grid-column: 1 / 2;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
 
     background-color: var(--light_gray_color);
     font-size: 1rem;
@@ -218,7 +299,7 @@ body {
 
     /* overflow-y: auto; */
     overflow-x: hidden;
-    position: relative;
+    transition: transform 360ms ease-in-out;
 }
 
 .sideList {
@@ -247,7 +328,7 @@ body {
 }
 
 .sideItemText {
-    font-size: 3.6rem;
+    font-size: var(--fs_heading_lg);
     font-weight: 300;
     color: var(--black_text);
     text-transform: capitalize;
@@ -259,7 +340,7 @@ body {
 
 .sideItemNumber,
 .projectItemNumber {
-    font-size: 1.8rem;
+    font-size: var(--fs_normal_lg);
     font-weight: 600;
     color: var(--white_text);
     background-color: var(--light_primary_color);
@@ -307,7 +388,7 @@ body {
 }
 
 .projectItemText {
-    font-size: 2.4rem;
+    font-size: var(--fs_normal_xl);
     color: var(--black_text);
     text-transform: uppercase;
 
@@ -326,8 +407,9 @@ body {
 }
 
 .sideBtnWrapper {
-    position: absolute;
-    bottom: 2em;
+    position: fixed;
+    left: 2em;
+    bottom: 4em;
     font-size: 1rem;
     padding: 0.6em;
 
@@ -340,6 +422,7 @@ body {
     transition-property: all;
     transition-duration: 800ms;
     transition-timing-function: ease-in;
+    z-index: 20;
 }
 
 .sideBtnIcon {
@@ -447,12 +530,12 @@ body {
 /* =============================================== */
 .content {
     grid-column: 2 /3;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
 
     font-size: 1rem;
     padding: 3em 4.6em;
     background-color: var(--white_color);
-    /* margin-bottom: 0.8em; */
+    margin-bottom: 1.6em;
 
     overflow-y: auto;
 }
@@ -540,6 +623,7 @@ body {
 
 .tCardCheckBoxBlank,
 .tCardCheckBoxChecked {
+    width: var(--fs_heading_md);
     display: none;
 }
 
@@ -559,7 +643,7 @@ body {
 }
 
 .tCardHeading {
-    font-size: 2rem;
+    font-size: var(--fs_normal_lg);
     color: var(--black_text);
     cursor: default;
 }
@@ -586,13 +670,14 @@ body {
 }
 
 .tCardDetailsIcon {
+    width: var(--fs_heading_lg);
     color: var(--blue_color);
     display: flex;
 }
 
 .tCardDetailsText,
 .tCardDate {
-    font-size: 1.8rem;
+    font-size: var(--fs_normal_lg);
     color: var(--black_text);
     cursor: default;
 }
@@ -641,8 +726,18 @@ body {
     cursor: pointer;
 }
 
+.tCardEditIcon {
+    width: var(--fs_heading_lg);
+}
+
 .tCardEditWrapper:hover .tCardEditIcon {
     color: var(--green_color);
+}
+
+.tCardDeleteWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tCardDeleteWrapper,
@@ -652,6 +747,7 @@ body {
 
 .tCardDeleteIconBlank,
 .tCardDeleteIconFull {
+    width: var(--fs_heading_md);
     transition-property: all;
     transition-duration: 360ms;
     transition-timing-function: ease;
@@ -849,12 +945,16 @@ body {
     background-color: var(--modal_blur_bg_color);
     backdrop-filter: blur(10px);
 
-    display: none;
+    /* display: none; */
+    visibility: hidden;
+    pointer-events: none;
     opacity: 0;
     animation: vanish 160ms ease;
 }
 
 .modalWrapper.show {
+    visibility: visible;
+    pointer-events: all;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -938,7 +1038,7 @@ body {
 .addEditModalProjectOption,
 .addEditModalDateLabel,
 .addEditModalPriorityLabel {
-    font-size: 2rem;
+    font-size: var(--fs_normal_lg);
     color: var(--black_text);
 }
 
@@ -1037,6 +1137,7 @@ body {
     padding: 0.2em 0.6em;
     border: 1px solid var(--black_text);
     border-radius: 6px;
+    pointer-events: all;
 }
 
 .addEditModalProjectLabel {
@@ -1080,7 +1181,7 @@ body {
 }
 
 .addEditModalPriorityBtn {
-    font-size: 2rem;
+    font-size: var(--fs_normal_lg);
     padding: 0.2em 0.8em;
     font-weight: 500;
     border-radius: 6px;
@@ -1158,7 +1259,7 @@ body {
 .addEditModalBtn,
 .addEditModalBtnAction,
 .addEditModalBtnType {
-    font-size: 2.4rem;
+    font-size: var(--fs_normal_xl);
     color: var(--black_text);
     font-weight: 700;
 }
@@ -1199,6 +1300,7 @@ body {
 }
 
 .modalCloseIcon {
+    width: var(--fs_heading_lg);
     color: var(--dark_red_color);
     transition: all 360ms ease;
 }
@@ -1230,7 +1332,7 @@ body {
 }
 
 .detailModalHeading {
-    font-size: 3.6rem;
+    font-size: var(--fs_heading_lg);
     margin: 0 auto;
 }
 
@@ -1246,7 +1348,7 @@ body {
 
 .detailModalContentHeading,
 .detailModalContent {
-    font-size: 2.6rem;
+    font-size: var(--fs_heading_3sm);
     color: var(--black_text);
 }
 
@@ -1273,4 +1375,491 @@ body {
 
 .modalWrapper .modal {
     animation: zoomInDisappear 360ms ease;
+}
+
+/* ================================================ */
+/* RESPONSIVE SET UP  */
+/* ================================================ */
+@media (max-width: 1200px) {
+    .logoWrapper {
+        gap: clamp(20px, 2.2rem, 36px);
+    }
+
+    .logoImg {
+        height: 5.6rem;
+    }
+
+    .logoText {
+        font-size: var(--fs_heading_xl);
+    }
+
+    .sideProjectItem {
+        padding: 1em 0;
+    }
+
+    .menuOpenIcon,
+    .menuCloseIcon {
+        height: var(--fs_heading_md);
+    }
+
+    .sideItemText {
+        font-size: var(--fs_heading_sm);
+    }
+
+    .sideItemNumber,
+    .projectItemNumber,
+    .projectItemText,
+    .tCardHeading,
+    .tCardDetailsText,
+    .tCardDate {
+        font-size: var(--fs_normal_md);
+    }
+
+    .content {
+        padding: 3em 4em;
+    }
+
+    .todoCard {
+        gap: max(10%, 20px);
+        padding: 1em 1.6em;
+    }
+
+    .tCardLeft {
+        gap: 1.2em;
+    }
+
+    .tCardRight {
+        gap: 1.6em;
+    }
+
+    .tCardDeleteWrapper,
+    .tCardDetailsIcon,
+    .tCardEditIcon,
+    .tCardDeleteIconBlank,
+    .tCardDeleteIconFull,
+    .tCardCheckBoxBlank,
+    .tCardCheckBoxChecked {
+        width: var(--fs_heading_sm);
+        height: var(--fs_heading_sm);
+    }
+
+    .modalWrapper.show .modal {
+        /* min-width: 100%; */
+        width: 86%;
+    }
+
+    .addEditItemFormModal.show {
+        width: 100%;
+    }
+
+    .addEditItemFormModal {
+        min-width: auto;
+    }
+
+    .addEditItemFormModal {
+        padding: 2.6em 3.2em;
+    }
+
+    .addEditModalBody {
+        gap: 2em;
+    }
+
+    .addEditItemFormModal.show {
+        gap: 2em;
+    }
+
+    .detailModal {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .addEditModalHeading,
+    .addEditModalHeadingAction,
+    .addEditModalHeadingType {
+        font-size: var(--fs_heading_xl);
+    }
+
+    .addEditModalTitleLabel,
+    .addEditModalDetailLabel,
+    .addEditModalTitleLabel span,
+    .addEditModalDetailLabel span,
+    .addEditModalTitleInp,
+    .addEditModalDetailInp,
+    .addEditModalDateInp,
+    .addEditModalProjectLabel,
+    .addEditModalProjectSelectInp,
+    .addEditModalProjectOption,
+    .addEditModalDateLabel,
+    .addEditModalPriorityLabel,
+    .addEditModalPriorityBtn {
+        font-size: var(--fs_normal_md);
+    }
+
+    .detailModalContentHeading,
+    .detailModalContent {
+        font-size: var(--fs_normal_xl);
+    }
+
+    .detailModalHeading {
+        font-size: var(--fs_heading_md);
+    }
+
+    .addEditModalBtn,
+    .addEditModalBtnAction,
+    .addEditModalBtnType {
+        font-size: var(--fs_normal_lg);
+    }
+
+    .addEditModalFooter {
+        margin-top: 0.8em;
+    }
+
+    .modalCloseWrapper {
+        padding: 0.36em;
+    }
+
+    .modalCloseIcon {
+        width: var(--fs_heading_sm);
+    }
+}
+
+@media (max-width: 1000px) {
+    .menuWrapper {
+        display: flex;
+    }
+
+    .sideBar {
+        top: 0;
+        bottom: 0;
+        min-width: 360px;
+        position: absolute;
+        z-index: 10;
+    }
+
+    .sideBar.hide {
+        transform: translateX(-100%);
+    }
+    .sideBar.show {
+        transform: translateX(0%);
+    }
+
+    .content {
+        grid-column: 1 / 3;
+    }
+
+    .sideBtnAddList.show {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .navBar {
+        padding: 0.8em 2.6em;
+    }
+
+    .logoWrapper {
+        gap: clamp(12px, 1.6rem, 20px);
+    }
+
+    .logoImg {
+        height: 3.6rem;
+    }
+
+    .logoText {
+        font-size: var(--fs_heading_md);
+    }
+
+    .menuOpenIcon,
+    .menuCloseIcon {
+        height: var(--fs_heading_sm);
+    }
+
+    .sideBar {
+        min-width: auto;
+    }
+
+    .sideItemText {
+        font-size: var(--fs_heading_ssm);
+    }
+
+    .sideItemNumber,
+    .projectItemNumber,
+    .projectItemText {
+        font-size: var(--fs_normal_md);
+    }
+
+    .tCardHeading,
+    .tCardDetailsText {
+        font-size: var(--fs_normal_sm);
+    }
+
+    .tCardDate {
+        font-size: var(--fs_normal_3sm);
+        min-width: calc(var(--toDo_Card_Date_min_width) * 0.6);
+    }
+
+    .content {
+        padding: 3em 2em;
+    }
+
+    .todoCard {
+        gap: min(10%, 20px);
+        padding: 1em 1em;
+    }
+
+    .tCardLeft {
+        gap: 1em;
+    }
+
+    .tCardRight {
+        gap: 0.8em;
+    }
+
+    .tCardDetailsWrapper:hover {
+        border: none;
+    }
+
+    .tCardDetailsWrapper:hover .tCardDetailsText.hidden {
+        width: 0px;
+    }
+
+    .tCardDetailsWrapper:hover .tCardDetailsIcon {
+        width: 100%;
+    }
+
+    .tCardDeleteWrapper,
+    .tCardDetailsIcon,
+    .tCardEditIcon,
+    .tCardDeleteIconBlank,
+    .tCardDeleteIconFull,
+    .tCardCheckBoxBlank,
+    .tCardCheckBoxChecked {
+        min-width: var(--fs_normal_xl);
+        min-height: var(--fs_normal_xl);
+
+        width: var(--fs_normal_xl);
+        height: var(--fs_normal_xl);
+    }
+
+    .modalWrapper.show .modal {
+        width: 92%;
+    }
+
+    .addEditItemFormModal.show {
+        width: 100%;
+        padding: 2.6em 3.2em;
+        gap: 2em;
+    }
+
+    .addEditItemFormModal {
+        min-width: auto;
+    }
+
+    .addEditModalBody {
+        gap: 1.6em;
+    }
+
+    .detailModal.show {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .addEditModalHeading,
+    .addEditModalHeadingAction,
+    .addEditModalHeadingType {
+        font-size: var(--fs_heading_sm);
+    }
+
+    .addEditModalTitleLabel,
+    .addEditModalDetailLabel,
+    .addEditModalTitleLabel span,
+    .addEditModalDetailLabel span,
+    .addEditModalTitleInp,
+    .addEditModalDetailInp,
+    .addEditModalDateInp,
+    .addEditModalProjectLabel,
+    .addEditModalProjectSelectInp,
+    .addEditModalProjectOption,
+    .addEditModalDateLabel,
+    .addEditModalPriorityLabel,
+    .addEditModalPriorityBtn {
+        font-size: var(--fs_normal_sm);
+    }
+
+    .detailModalContentHeading,
+    .detailModalContent {
+        font-size: var(--fs_normal_md);
+    }
+
+    .detailModalHeading {
+        font-size: var(--fs_heading_sm);
+    }
+
+    .addEditModalBtn,
+    .addEditModalBtnAction,
+    .addEditModalBtnType {
+        font-size: var(--fs_normal_md);
+    }
+
+    .addEditModalFooter {
+        margin-top: 0.6em;
+    }
+
+    .modalCloseWrapper {
+        padding: 0.36em;
+    }
+
+    .modalCloseIcon {
+        width: var(--fs_heading_ssm);
+    }
+}
+
+@media (max-width: 460px) {
+    .navBar {
+        padding: 0.6em 1.6em;
+    }
+
+    .logoWrapper {
+        gap: clamp(8px, 1rem, 16px);
+    }
+
+    .logoImg {
+        height: 2.6rem;
+    }
+
+    .logoText {
+        font-size: var(--fs_heading_3sm);
+    }
+
+    .menuOpenIcon,
+    .menuCloseIcon {
+        height: var(--fs_heading_ssm);
+    }
+
+    .sideBtnWrapper {
+        left: 2em;
+        bottom: 4em;
+    }
+
+    .sideItemText {
+        font-size: var(--fs_normal_xl);
+    }
+
+    .sideItemNumber,
+    .projectItemNumber,
+    .projectItemText {
+        font-size: var(--fs_normal_sm);
+    }
+
+    .tCardHeading,
+    .tCardDetailsText {
+        font-size: var(--fs_normal_3sm);
+    }
+
+    .tCardDate {
+        font-size: var(--fs_normal_4sm);
+        max-width: calc(var(--toDo_Card_Date_min_width) * 0.36);
+        min-width: auto;
+        text-wrap: pretty;
+    }
+
+    .content {
+        padding: 2em 1.2em;
+    }
+
+    .todoCard {
+        gap: min(8%, 10px);
+        padding: 0.6em 0.8em;
+    }
+
+    .tCardLeft {
+        gap: 0.2em;
+    }
+
+    .tCardRight {
+        gap: 0.4em;
+    }
+
+    .tCardDeleteWrapper,
+    .tCardDetailsIcon,
+    .tCardEditIcon,
+    .tCardDeleteIconBlank,
+    .tCardDeleteIconFull,
+    .tCardCheckBoxBlank,
+    .tCardCheckBoxChecked {
+        min-width: var(--fs_normal_md);
+        min-height: var(--fs_normal_md);
+
+        width: var(--fs_normal_md);
+        height: var(--fs_normal_md);
+    }
+
+    .modalWrapper.show .modal {
+        width: 96%;
+    }
+
+    .addEditItemFormModal.show {
+        width: 100%;
+        padding: 1em 2em;
+        gap: 2em;
+    }
+
+    .addEditModalBody {
+        gap: 1.2em;
+    }
+
+    .detailModal.show {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .addEditModalHeading,
+    .addEditModalHeadingAction,
+    .addEditModalHeadingType {
+        font-size: var(--fs_normal_xl);
+    }
+
+    .addEditModalTitleLabel,
+    .addEditModalDetailLabel,
+    .addEditModalTitleLabel span,
+    .addEditModalDetailLabel span,
+    .addEditModalTitleInp,
+    .addEditModalDetailInp,
+    .addEditModalDateInp,
+    .addEditModalProjectLabel,
+    .addEditModalProjectSelectInp,
+    .addEditModalProjectOption,
+    .addEditModalDateLabel,
+    .addEditModalPriorityLabel,
+    .addEditModalPriorityBtn {
+        font-size: var(--fs_normal_ssm);
+    }
+
+    .detailModalContentHeading,
+    .detailModalContent {
+        font-size: var(--fs_normal_3sm);
+    }
+
+    .detailModalHeading {
+        font-size: var(--fs_heading_3sm);
+    }
+
+    .addEditModalBtn,
+    .addEditModalBtnAction,
+    .addEditModalBtnType {
+        font-size: var(--fs_normal_sm);
+    }
+
+    .addEditModalFooter {
+        margin-top: 0.4em;
+    }
+
+    .modalCloseWrapper {
+        padding: 0.3em;
+    }
+
+    .modalCloseIcon {
+        width: var(--fs_normal_xl);
+    }
 }

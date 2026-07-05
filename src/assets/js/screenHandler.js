@@ -381,7 +381,6 @@ const toDoDeleteBtnHandler = (toDo, notes, sideBar, id) => {
 };
 
 const noteCardDeleteBtnHandler = (toDo, notes, sideBar, id) => {
-
     notes.deleteNoteItemById(true, notes, id);
     noteCardsListScreenRenderer(todoWrapper, notesWrapper, toDo, notes, sideBar);
     sideBarListScreenHandler(sideBarList, toDo, notes, sideBar);

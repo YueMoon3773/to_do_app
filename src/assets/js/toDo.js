@@ -9,7 +9,7 @@ import {
 
 const createToDo = (title, detail = '', dueDate = '', priority = '', category = '', completeStatus = false) => {
     const toDo = {
-        id: nanoid(),
+        id: 'that_to_do_app' + nanoid(),
         title,
         detail,
         dueDate,
@@ -195,9 +195,17 @@ const toDoListManage = () => {
         }
 
         for (let i = 0; i < localStorage.length; i++) {
-            let localStorageItem = JSON.parse(localStorage.getItem(localStorage.key(i)));
-            if (localStorageItem.type === 'toDo') {
-                toDoList.push(localStorageItem);
+            const key = localStorage.key(i);
+            let localStorageItem;
+            try {
+                localStorageItem = JSON.parse(localStorage.getItem(key));
+                if (localStorageItem.type === 'toDo') {
+                    toDoList.push(localStorageItem);
+                }
+            } catch (err) {
+                console.warn(`Corrupted entry "${key}" removed:`, err);
+                localStorage.removeItem(key);
+                continue;
             }
         }
     };

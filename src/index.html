@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -18,11 +18,26 @@
         <div class="app">
             <!-- NAVBAR SECTION  -->
             <nav class="navBar">
-                <!-- <div class="menuWrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="menuIcon">
+                <div class="menuWrapper open">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="menuOpenIcon">
                         <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
                     </svg>
-                </div> -->
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="menuCloseIcon"
+                    >
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </div>
+
                 <div class="logoWrapper">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -41,10 +56,11 @@
                 </div>
             </nav>
 
-            <!-- SIDEBAR SECTION  -->
-            <aside class="sideBar">
-                <ul class="sideList">
-                    <!-- <li class="sideItem">
+            <main class="main">
+                <!-- SIDEBAR SECTION  -->
+                <aside class="sideBar hide">
+                    <ul class="sideList">
+                        <!-- <li class="sideItem">
                         <div class="sideItemContentWrapper">
                             <span class="sideItemText"> Home </span>
                             <span class="sideItemNumber">99+</span>
@@ -93,28 +109,14 @@
                             <span class="sideItemNumber">99+</span>
                         </div>
                     </li> -->
-                </ul>
-
-                <div class="sideBtnWrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="sideBtnIcon">
-                        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-                    </svg>
-
-                    <title class="sideBtnTitle">Add Item</title>
-
-                    <ul class="sideBtnAddList">
-                        <li role="button" class="sideBtnAddItem" data-action="add" data-type="toDo">To Do task</li>
-                        <li role="button" class="sideBtnAddItem" data-action="add" data-type="project">Project</li>
-                        <li role="button" class="sideBtnAddItem" data-action="add" data-type="note">Note</li>
                     </ul>
-                </div>
-            </aside>
+                </aside>
 
-            <!-- MAIN CONTENT SECTION  -->
-            <div class="content">
-                <!-- TO DO SECTION  -->
-                <div class="todoWrapper show">
-                    <!-- <div class="todoCard importantMed">
+                <!-- MAIN CONTENT SECTION  -->
+                <div class="content">
+                    <!-- TO DO SECTION  -->
+                    <div class="todoWrapper show">
+                        <!-- <div class="todoCard importantMed">
                         <div class="tCardLeft">
                             <div class="tCardCheckBoxWrapper">
                                 <svg
@@ -185,11 +187,11 @@
                             </div>
                         </div>
                     </div> -->
-                </div>
+                    </div>
 
-                <!-- NOTES SECTION  -->
-                <div class="notesWrapper">
-                    <!-- <div class="noteCard">
+                    <!-- NOTES SECTION  -->
+                    <div class="notesWrapper">
+                        <!-- <div class="noteCard">
                         <div class="noteCardHeaderWrapper">
                             <h2 contenteditable="true" class="noteHeading">
                                 Some really really long long Note heading
@@ -217,7 +219,22 @@
                             </p>
                         </div>
                     </div> -->
+                    </div>
                 </div>
+            </main>
+
+            <div class="sideBtnWrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="sideBtnIcon">
+                    <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+                </svg>
+
+                <title class="sideBtnTitle">Add Item</title>
+
+                <ul class="sideBtnAddList">
+                    <li role="button" class="sideBtnAddItem" data-action="add" data-type="toDo">To Do task</li>
+                    <li role="button" class="sideBtnAddItem" data-action="add" data-type="project">Project</li>
+                    <li role="button" class="sideBtnAddItem" data-action="add" data-type="note">Note</li>
+                </ul>
             </div>
 
             <footer class="footer">
