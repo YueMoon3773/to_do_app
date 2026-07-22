@@ -1,14 +1,57 @@
 import { nanoid } from 'nanoid';
 import {
     storageAvailable,
-    clearStorage,
     verifyItemExistInStorage,
     saveDataToStorage,
     deleteDataByKeyFromStorage,
 } from './localStorageVerify';
 
-const createToDo = (title, detail = '', dueDate = '', priority = '', category = '', completeStatus = false) => {
-    const toDo = {
+export interface ToDoType {
+    id: string;
+    title: string;
+    detail: string;
+    dueDate: string;
+    priority: string;
+    category: string;
+    completeStatus: boolean;
+    type: 'toDo';
+}
+
+interface ToDoItemByIdType {
+    item: ToDoType;
+    index: number;
+}
+
+export interface ToDoListManageObjType {
+    getToDoList: () => ToDoType[];
+    getToDoListByCategory: (category: string) => ToDoType[];
+    getToDoItemById: (toDoListManageObj: ToDoListManageObjType, id: string) => ToDoItemByIdType | null;
+    updateToDoCompleteStatusById: (
+        toDoListManageObj: ToDoListManageObjType,
+        id: string,
+        completeStatus: boolean,
+    ) => void;
+    updateToDoItemById: (
+        toDoListManageObj: ToDoListManageObjType,
+        id: string,
+        completeStatus: 'true' | 'false' | boolean,
+        toDoItem: ToDoType,
+    ) => void;
+    resetToDoList: () => void;
+    deleteToDoItemById: (deleteItemFromStorage: boolean, toDoListManageObj: ToDoListManageObjType, id: string) => void;
+    initializeToDoList: () => void;
+    addItemToToDoList: (saveItemToStorage: boolean, toDoItem: ToDoType) => void;
+}
+
+const createToDo = (
+    title: string,
+    detail: string = '',
+    dueDate: string = '',
+    priority: string = '',
+    category: string = '',
+    completeStatus: boolean = false,
+): ToDoType => {
+    const toDo: ToDoType = {
         id: 'that_to_do_app' + nanoid(),
         title,
         detail,
@@ -23,7 +66,7 @@ const createToDo = (title, detail = '', dueDate = '', priority = '', category = 
 };
 
 const toDoListManage = () => {
-    const sampleToDoList = [
+    const sampleToDoList: ToDoType[] = [
         createToDo(
             'Go shopping',
             "Buy this; that; these and those. Don't forget to buy it also",
@@ -172,17 +215,17 @@ const toDoListManage = () => {
         //     true,
         // ),
     ];
-    let toDoList = [];
+    let toDoList: ToDoType[] = [];
 
-    const getSampleToDoList = () => {
+    const getSampleToDoList = (): ToDoType[] => {
         return sampleToDoList;
     };
 
-    const getToDoList = () => {
+    const getToDoList = (): ToDoType[] => {
         return toDoList;
     };
 
-    const initializeToDoList = () => {
+    const initializeToDoList = (): void | false => {
         // Add sample to do items
         if (getToDoList().length === 0) {
             toDoList = [...getSampleToDoList()];
@@ -194,24 +237,33 @@ const toDoListManage = () => {
             return false;
         }
 
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            let localStorageItem;
-            try {
-                localStorageItem = JSON.parse(localStorage.getItem(key));
-                if (localStorageItem.type === 'toDo') {
-                    toDoList.push(localStorageItem);
+        for (let i: number = 0; i < localStorage.length; i++) {
+            const key: string | null = localStorage.key(i);
+
+            if (key === null) continue;
+            else {
+                let localStorageItem: ToDoType;
+                try {
+                    const rawData: string | null = localStorage.getItem(key);
+
+                    if (rawData === null) continue;
+                    else {
+                        localStorageItem = JSON.parse(rawData);
+                        if (localStorageItem.type === 'toDo') {
+                            toDoList.push(localStorageItem);
+                        }
+                    }
+                } catch (err) {
+                    console.warn(`Corrupted entry "${key}" removed:`, err);
+                    localStorage.removeItem(key);
+                    continue;
                 }
-            } catch (err) {
-                console.warn(`Corrupted entry "${key}" removed:`, err);
-                localStorage.removeItem(key);
-                continue;
             }
         }
     };
 
-    const getToDoListByCategory = (category = 'personal') => {
-        let ret = getToDoList().filter((toDoItem, index) => {
+    const getToDoListByCategory = (category: string = 'personal'): ToDoType[] => {
+        let ret: ToDoType[] = getToDoList().filter((toDoItem: ToDoType): boolean => {
             return toDoItem.category === category;
         });
         // console.log('ret: ');
@@ -220,16 +272,20 @@ const toDoListManage = () => {
         return ret;
     };
 
-    const getToDoItemById = (toDoList, id) => {
-        let itemIndex = -99;
-        const item = toDoList.getToDoList().find((toDoItem, index) => {
-            if (toDoItem.id === id) {
-                itemIndex = index;
-            }
-            return toDoItem.id === id;
-        });
+    const getToDoItemById = (toDoListManageObj: ToDoListManageObjType, id: string): ToDoItemByIdType | null => {
+        let itemIndex: number = -99;
+        const item: ToDoType | undefined = toDoListManageObj
+            .getToDoList()
+            .find((toDoItem: ToDoType, index: number): boolean => {
+                if (toDoItem.id === id) {
+                    itemIndex = index;
+                }
+                return toDoItem.id === id;
+            });
 
-        const ret = {
+        if (!item) return null;
+
+        const ret: ToDoItemByIdType = {
             item: item,
             index: itemIndex,
         };
@@ -238,22 +294,44 @@ const toDoListManage = () => {
         return ret;
     };
 
-    const updateToDoCompleteStatusById = (toDoList, id, completeStatus = false) => {
-        const itemIndex = toDoList.getToDoItemById(toDoList, id).index;
+    const updateToDoCompleteStatusById = (
+        toDoListManageObj: ToDoListManageObjType,
+        id: string,
+        completeStatus: boolean = false,
+    ): void => {
+        const item: ToDoItemByIdType | null = toDoListManageObj.getToDoItemById(toDoListManageObj, id);
+        if (item === null) {
+            alert('Cannot modify this item right now. Please try again later!');
+            return;
+        }
+
+        const itemIndex: number = item.index;
         if (itemIndex === -99) {
             alert('Cannot modify this item right now. Please try again later!');
         } else {
-            toDoList.getToDoList()[itemIndex].completeStatus = completeStatus;
+            toDoListManageObj.getToDoList()[itemIndex].completeStatus = completeStatus;
 
             if (verifyItemExistInStorage('localStorage', id)) {
                 deleteDataByKeyFromStorage('localStorage', id);
-                saveDataToStorage('localStorage', 'toDo', toDoList.getToDoList()[itemIndex]);
+                saveDataToStorage('localStorage', 'toDo', toDoListManageObj.getToDoList()[itemIndex]);
             }
         }
     };
 
-    const updateToDoItemById = (toDoList, id, completeStatus = false, toDoItem) => {
-        const itemIndex = toDoList.getToDoItemById(toDoList, id).index;
+    const updateToDoItemById = (
+        toDoListManageObj: ToDoListManageObjType,
+        id: string,
+        completeStatus: 'true' | 'false' | boolean = false,
+        toDoItem: ToDoType,
+    ): void => {
+        const item: ToDoItemByIdType | null = toDoListManageObj.getToDoItemById(toDoListManageObj, id);
+
+        if (item === null) {
+            alert('Cannot modify this item right now. Please try again later!');
+            return;
+        }
+
+        const itemIndex = item.index;
         if (itemIndex === -99) {
             alert('Cannot modify this item right now. Please try again later!');
         } else {
@@ -266,27 +344,27 @@ const toDoListManage = () => {
                 completeState = completeStatus;
             }
 
-            toDoList.getToDoList()[itemIndex].title = toDoItem.title;
-            toDoList.getToDoList()[itemIndex].detail = toDoItem.detail;
-            toDoList.getToDoList()[itemIndex].dueDate = toDoItem.dueDate;
-            toDoList.getToDoList()[itemIndex].priority = toDoItem.priority;
-            toDoList.getToDoList()[itemIndex].category = toDoItem.category;
-            toDoList.getToDoList()[itemIndex].completeStatus = completeState;
+            toDoListManageObj.getToDoList()[itemIndex].title = toDoItem.title;
+            toDoListManageObj.getToDoList()[itemIndex].detail = toDoItem.detail;
+            toDoListManageObj.getToDoList()[itemIndex].dueDate = toDoItem.dueDate;
+            toDoListManageObj.getToDoList()[itemIndex].priority = toDoItem.priority;
+            toDoListManageObj.getToDoList()[itemIndex].category = toDoItem.category;
+            toDoListManageObj.getToDoList()[itemIndex].completeStatus = completeState;
 
             if (verifyItemExistInStorage('localStorage', id)) {
                 deleteDataByKeyFromStorage('localStorage', id);
-                saveDataToStorage('localStorage', 'toDo', toDoList.getToDoList()[itemIndex]);
+                saveDataToStorage('localStorage', 'toDo', toDoListManageObj.getToDoList()[itemIndex]);
             }
             // console.table(toDoList.getToDoList());
         }
     };
 
-    const resetToDoList = () => {
+    const resetToDoList = (): void => {
         toDoList = [];
     };
 
-    const addItemToToDoList = (saveItemToStorage = false, toDoItem) => {
-        let itemToAdd;
+    const addItemToToDoList = (saveItemToStorage: boolean = false, toDoItem: ToDoType): void => {
+        let itemToAdd: ToDoType;
         if (
             toDoItem.type === 'toDo' &&
             toDoItem.hasOwnProperty('title') &&
@@ -303,19 +381,29 @@ const toDoListManage = () => {
                 toDoItem.category,
             );
             getToDoList().push(itemToAdd);
-        }
-        if (saveItemToStorage) {
-            saveDataToStorage('localStorage', 'toDo', itemToAdd);
+
+            if (saveItemToStorage) {
+                saveDataToStorage('localStorage', 'toDo', itemToAdd);
+            }
         }
         // console.log(itemToAdd);
     };
 
-    const deleteToDoItemById = (deleteItemFromStorage = false, toDoList, id) => {
-        const item = toDoList.getToDoItemById(toDoList, id);
+    const deleteToDoItemById = (
+        deleteItemFromStorage: boolean = false,
+        toDoListManageObj: ToDoListManageObjType,
+        id: string,
+    ): void => {
+        const item: ToDoItemByIdType | null = toDoListManageObj.getToDoItemById(toDoListManageObj, id);
         // console.log(item.index);
 
+        if (item === null) {
+            alert('Cannot modify this item right now. Please try again later!');
+            return;
+        }
+
         if (item.index !== -99) {
-            toDoList.getToDoList().splice(item.index, 1);
+            toDoListManageObj.getToDoList().splice(item.index, 1);
 
             if (deleteItemFromStorage) {
                 if (verifyItemExistInStorage('localStorage', id)) {

@@ -19,8 +19,16 @@ module.exports = {
             template: './src/index.html',
         }),
     ],
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
     module: {
         rules: [
+            {
+                test: /\.ts$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
