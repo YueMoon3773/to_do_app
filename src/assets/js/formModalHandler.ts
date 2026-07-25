@@ -1,30 +1,44 @@
+import { ToDoType, ToDoListManageObjType } from './toDo';
+import { NoteType, NoteListManageObjType } from './notes';
+import { SideBarManageObjType } from './sideBar';
+
+import { ToDoPriorityType } from './toDo';
+
+interface FormModalManageObjType {
+    addProjectHandler: () => void;
+    addNoteHandler: () => void;
+    addToDoHandler: () => void;
+    editToDoHandler: () => void;
+}
+
 const formModalManage = (
-    toDo,
-    notes,
-    sideBar,
-    hiddenIdInpValue,
-    hiddenCompleteStatusInpValue,
-    titleInpValue,
-    detailInpValue,
-    dateInpValue,
-    projectSelectInpValue,
-    priorityValue,
-) => {
-    const addProjectHandler = () => {
-        sideBar.addSideBarProjectChild(true, titleInpValue);
+    toDoListManageObj: ToDoListManageObjType,
+    noteListManageObj: NoteListManageObjType,
+    sideBarManageObj: SideBarManageObjType,
+    hiddenIdInpValue: string,
+    // hiddenCompleteStatusInpValue: 'true' | 'false' | boolean,
+    hiddenCompleteStatusInpValue: 'true' | 'false',
+    titleInpValue: string,
+    detailInpValue: string,
+    dateInpValue: string,
+    projectSelectInpValue: string,
+    priorityValue: ToDoPriorityType,
+): FormModalManageObjType => {
+    const addProjectHandler = (): void => {
+        sideBarManageObj.addSideBarProjectChild(true, titleInpValue);
     };
 
-    const addNoteHandler = () => {
-        const noteItemToAdd = {
+    const addNoteHandler = (): void => {
+        const noteItemToAdd: Omit<NoteType, 'id'> = {
             title: titleInpValue,
             detail: detailInpValue,
             type: 'note',
         };
-        notes.addItemToNotesList(true, noteItemToAdd);
+        noteListManageObj.addItemToNotesList(true, noteItemToAdd);
     };
 
-    const addToDoHandler = () => {
-        const toDoItemToAdd = {
+    const addToDoHandler = (): void => {
+        const toDoItemToAdd: Omit<ToDoType, 'id' | 'completeStatus'> = {
             title: titleInpValue,
             detail: detailInpValue,
             dueDate: dateInpValue,
@@ -32,11 +46,11 @@ const formModalManage = (
             category: projectSelectInpValue,
             type: 'toDo',
         };
-        toDo.addItemToToDoList(true, toDoItemToAdd);
+        toDoListManageObj.addItemToToDoList(true, toDoItemToAdd);
     };
 
-    const editToDoHandler = () => {
-        const toDoItemToAdd = {
+    const editToDoHandler = (): void => {
+        const toDoItemToAdd: Omit<ToDoType, 'id' | 'completeStatus'> = {
             title: titleInpValue,
             detail: detailInpValue,
             dueDate: dateInpValue,
@@ -45,7 +59,12 @@ const formModalManage = (
             type: 'toDo',
         };
 
-        toDo.updateToDoItemById(toDo, hiddenIdInpValue, hiddenCompleteStatusInpValue, toDoItemToAdd);
+        toDoListManageObj.updateToDoItemById(
+            toDoListManageObj,
+            hiddenIdInpValue,
+            hiddenCompleteStatusInpValue,
+            toDoItemToAdd,
+        );
     };
 
     return {

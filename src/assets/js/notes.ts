@@ -19,7 +19,7 @@ export interface NoteListManageObjType {
     getNotesList: () => NoteType[];
     resetNotesList: () => void;
     initializeNotesList: () => void | false;
-    addItemToNotesList: (saveItemToStorage: boolean, noteItem: NoteType) => void;
+    addItemToNotesList: (saveItemToStorage: boolean, noteItem: Omit<NoteType, 'id'>) => void;
     deleteNoteItemById: (deleteItemFromStorage: boolean, noteListManageObj: NoteListManageObjType, id: string) => void;
 }
 
@@ -100,7 +100,7 @@ const notesListManage = (): NoteListManageObjType => {
         }
     };
 
-    const addItemToNotesList = (saveItemToStorage: boolean = false, noteItem: NoteType): void => {
+    const addItemToNotesList = (saveItemToStorage: boolean = false, noteItem: Omit<NoteType, 'id'>): void => {
         let itemToAdd: NoteType;
         if (noteItem.type === 'note' && noteItem.hasOwnProperty('title') && noteItem.hasOwnProperty('detail')) {
             itemToAdd = createNote(noteItem.title, noteItem.detail);

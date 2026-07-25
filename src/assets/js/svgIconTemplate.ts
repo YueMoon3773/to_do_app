@@ -1,6 +1,16 @@
-const SVGIconTemplate = () => {
-    const tCardCheckBoxBlank = (state) => {
-        const ret = `
+interface SvgIconTemplateType {
+    tCardCheckBoxBlank: (state: 'show' | '') => string;
+    tCardCheckBoxChecked: (state: 'show' | '') => string;
+    tCardDetailsIcon: (state: 'show' | '') => string;
+    tCardEditIcon: () => string;
+    tCardDeleteIconBlank: () => string;
+    tCardDeleteIconFull: () => string;
+    noteCloseBtnIcon: () => string;
+}
+
+const SVGIconTemplate = (): SvgIconTemplateType => {
+    const tCardCheckBoxBlank = (state: 'show' | ''): string => {
+        const ret: string = `
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 -960 960 960"
@@ -15,8 +25,8 @@ const SVGIconTemplate = () => {
     };
     // .insertAdjacentHTML('beforeend', bookCard);
 
-    const tCardCheckBoxChecked = (state) => {
-        const ret = `
+    const tCardCheckBoxChecked = (state: 'show' | ''): string => {
+        const ret: string = `
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 -960 960 960"
@@ -30,8 +40,8 @@ const SVGIconTemplate = () => {
         return ret;
     };
 
-    const tCardDetailsIcon = (state) => {
-        const ret = `
+    const tCardDetailsIcon = (state: 'show' | ''): string => {
+        const ret: string = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tCardDetailsIcon ${state}">
             <title>Task details</title>
             <path
@@ -54,8 +64,8 @@ const SVGIconTemplate = () => {
         return ret;
     };
 
-    const tCardDeleteIconBlank = () => {
-        const ret = `
+    const tCardDeleteIconBlank = (): string => {
+        const ret: string = `
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -70,8 +80,8 @@ const SVGIconTemplate = () => {
         return ret;
     };
 
-    const tCardDeleteIconFull = () => {
-        const ret = `
+    const tCardDeleteIconFull = (): string => {
+        const ret: string = `
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -86,8 +96,8 @@ const SVGIconTemplate = () => {
         return ret;
     };
 
-    const noteCloseBtnIcon = () => {
-        const ret = `
+    const noteCloseBtnIcon = (): string => {
+        const ret: string = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="noteCloseBtnIcon">
             <title>Delete note</title>
             <path

@@ -6,18 +6,20 @@ import {
     deleteDataByKeyFromStorage,
 } from './localStorageVerify';
 
+export type ToDoPriorityType = 'low' | 'medium' | 'high' | '';
+
 export interface ToDoType {
     id: string;
     title: string;
     detail: string;
     dueDate: string;
-    priority: string;
+    priority: ToDoPriorityType;
     category: string;
     completeStatus: boolean;
     type: 'toDo';
 }
 
-interface ToDoItemByIdType {
+export interface ToDoItemByIdType {
     item: ToDoType;
     index: number;
 }
@@ -35,19 +37,19 @@ export interface ToDoListManageObjType {
         toDoListManageObj: ToDoListManageObjType,
         id: string,
         completeStatus: 'true' | 'false' | boolean,
-        toDoItem: ToDoType,
+        toDoItem: Omit<ToDoType, 'id' | 'completeStatus'>,
     ) => void;
     resetToDoList: () => void;
     deleteToDoItemById: (deleteItemFromStorage: boolean, toDoListManageObj: ToDoListManageObjType, id: string) => void;
     initializeToDoList: () => void;
-    addItemToToDoList: (saveItemToStorage: boolean, toDoItem: ToDoType) => void;
+    addItemToToDoList: (saveItemToStorage: boolean, toDoItem: Omit<ToDoType, 'id' | 'completeStatus'>) => void;
 }
 
 const createToDo = (
     title: string,
     detail: string = '',
     dueDate: string = '',
-    priority: string = '',
+    priority: ToDoPriorityType = '',
     category: string = '',
     completeStatus: boolean = false,
 ): ToDoType => {
@@ -322,7 +324,7 @@ const toDoListManage = () => {
         toDoListManageObj: ToDoListManageObjType,
         id: string,
         completeStatus: 'true' | 'false' | boolean = false,
-        toDoItem: ToDoType,
+        toDoItem: Omit<ToDoType, 'id' | 'completeStatus'>,
     ): void => {
         const item: ToDoItemByIdType | null = toDoListManageObj.getToDoItemById(toDoListManageObj, id);
 
@@ -363,7 +365,10 @@ const toDoListManage = () => {
         toDoList = [];
     };
 
-    const addItemToToDoList = (saveItemToStorage: boolean = false, toDoItem: ToDoType): void => {
+    const addItemToToDoList = (
+        saveItemToStorage: boolean = false,
+        toDoItem: Omit<ToDoType, 'id' | 'completeStatus'>,
+    ): void => {
         let itemToAdd: ToDoType;
         if (
             toDoItem.type === 'toDo' &&
@@ -385,7 +390,7 @@ const toDoListManage = () => {
             if (saveItemToStorage) {
                 saveDataToStorage('localStorage', 'toDo', itemToAdd);
             }
-        }
+        } else return;
         // console.log(itemToAdd);
     };
 

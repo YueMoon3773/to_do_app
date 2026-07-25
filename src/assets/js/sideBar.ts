@@ -10,12 +10,12 @@ export interface ProjectChildType {
     number: number;
 }
 
-interface SideBarItemBaseType {
+export interface SideBarItemBaseType {
     text: string;
     number: number;
 }
 
-interface SideBarItemType extends SideBarItemBaseType {
+export interface SideBarItemType extends SideBarItemBaseType {
     child?: SideBarItemBaseType[];
 }
 
@@ -24,7 +24,7 @@ interface TodayAndWeekSideBarItemType {
     list: ToDoType[];
 }
 
-interface SideBarManageObjType {
+export interface SideBarManageObjType {
     getSideBarItemsList: () => SideBarItemType[];
     addSideBarProjectChild: (saveItemToStorage: boolean, projectTitle: string) => void;
     getSideBarProjectItemsList: () => string[] | null;
