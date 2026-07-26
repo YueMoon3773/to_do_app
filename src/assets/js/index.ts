@@ -10,7 +10,7 @@ AI:done Add modal prj opts addEditModalProjectOption based on the project list.
 AI: un-show todoWrapper/noteWrapper when other are shown
 */
 
-// import '../css/styles.css';
+import '../css/styles.css';
 
 import { toDoListManage } from './toDo';
 import { notesListManage } from './notes';

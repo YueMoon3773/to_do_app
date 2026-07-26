@@ -1,6 +1,6 @@
 import { storageAvailable, saveDataToStorage } from './localStorageVerify';
 
-import dateHandler from './datesHandler.js';
+import dateHandler from './datesHandler';
 
 import { ToDoType, ToDoListManageObjType } from './toDo';
 import { NoteListManageObjType } from './notes';
